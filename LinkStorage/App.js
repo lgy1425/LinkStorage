@@ -7,25 +7,38 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
+import {View, Text, ActivityIndicator, Platform} from 'react-native';
 import DefaultPreference from 'react-native-default-preference';
+import Contant from './constants/contant';
+import DeviceInfo from 'react-native-device-info';
 
 export default function App() {
   const [deviceLoaded, setDeviceLoaded] = useState(false);
 
   useEffect(() => {
-    DefaultPreference.get('test').then(function (value) {
+    DefaultPreference.get('username').then(function (value) {
       if (value) {
-        console.log('has value', value);
         setDeviceLoaded(true);
       } else {
-        fetch('https://callcenter.softgroup.co.kr/').then((response) => {
-          console.log(response);
-          DefaultPreference.set('test', 'my value').then(function () {
-            console.log('done');
-            setDeviceLoaded(true);
+        fetch(`${Contant.base_url}/device/save`, {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            device_id: DeviceInfo.getUniqueId(),
+            platform: Platform.OS,
+          }),
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson.username);
+            DefaultPreference.set('username', responseJson.username).then(
+              function () {
+                setDeviceLoaded(true);
+              },
+            );
           });
-        });
       }
     });
   }, []);
