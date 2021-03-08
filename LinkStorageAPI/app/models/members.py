@@ -15,3 +15,12 @@ class Member(Base, UserMixin):
     username = Column(String(30))
     platform = Column(String(10))
     device_id = Column(String(255))
+
+    @classmethod
+    def checkDevice(cls, device_id):
+        return cls.query.filter_by(device_id=device_id).first()
+
+    @classmethod
+    def save(cls, member):
+        db.session.add(member)
+        db.session.commit()
