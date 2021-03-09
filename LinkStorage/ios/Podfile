@@ -23,6 +23,8 @@ target 'LinkStorage' do
   end
 end
 
+pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
 target 'LinkStorage-tvOS' do
   # Pods for LinkStorage-tvOS
 

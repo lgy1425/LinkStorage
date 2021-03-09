@@ -12,6 +12,8 @@ import DefaultPreference from 'react-native-default-preference';
 import Contant from './constants/contant';
 import DeviceInfo from 'react-native-device-info';
 
+import LinkNavigation from './navigation/LinkNavigation';
+
 export default function App() {
   const [deviceLoaded, setDeviceLoaded] = useState(false);
 
@@ -51,10 +53,7 @@ export default function App() {
     );
   }
 
-  return (
-    <View>
-      <Text>Testing........</Text>
-      <Text>Testing2........</Text>
-    </View>
-  );
+  console.log('hi...');
+
+  return <LinkNavigation />;
 }
