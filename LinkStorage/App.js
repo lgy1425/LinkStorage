@@ -53,7 +53,5 @@ export default function App() {
     );
   }
 
-  console.log('hi...');
-
   return <LinkNavigation />;
 }

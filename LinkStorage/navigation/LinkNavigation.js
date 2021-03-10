@@ -12,6 +12,8 @@ import {Platform} from 'react-native';
 import LinkListScreen from '../screens/LinkListScreen';
 import FavListScreen from '../screens/FavListScreen';
 import SettingScreen from '../screens/SettingScreen';
+import AddLinkScreen from '../screens/AddLinkScreen';
+import EditCategoriesScreen from '../screens/EditCategoriesScreen';
 
 const defaultStackOptions = {
   defaultNavigationOptions: {
@@ -20,7 +22,8 @@ const defaultStackOptions = {
     },
     headerTitleStyle: {},
     headerTintColor: 'white',
-    headerBackTitle: '',
+    headerBackTitle: null,
+    headerTruncatedBackTitle: '',
     headerBackTitleStyle: {},
   },
 };
@@ -28,6 +31,7 @@ const defaultStackOptions = {
 const MainNavigation = createStackNavigator(
   {
     LinkList: LinkListScreen,
+    AddLink: AddLinkScreen,
   },
   defaultStackOptions,
 );
@@ -35,6 +39,7 @@ const MainNavigation = createStackNavigator(
 const FavNavigation = createStackNavigator(
   {
     FavList: FavListScreen,
+    AddLink: AddLinkScreen,
   },
   defaultStackOptions,
 );
@@ -45,7 +50,7 @@ const tabScreenConfig = {
     navigationOptions: {
       tabBarLabel: 'Links',
       tabBarIcon: (tabInfo) => {
-        return <Icon name="ios-link" size={25} color={tabInfo.tintColor} />;
+        return <Icon name="md-link" size={25} color={tabInfo.tintColor} />;
       },
       tabBarColor: Color.primaryColor,
     },
@@ -55,7 +60,7 @@ const tabScreenConfig = {
     navigationOptions: {
       tabBarLabel: 'Stars',
       tabBarIcon: (tabInfo) => {
-        return <Icon name="ios-star" size={25} color={tabInfo.tintColor} />;
+        return <Icon name="md-star" size={25} color={tabInfo.tintColor} />;
       },
       tabBarColor: Color.accentColor,
     },
@@ -79,6 +84,7 @@ const MainTabNavigator =
 const SettingNavigator = createStackNavigator(
   {
     Setting: SettingScreen,
+    EditCategories: EditCategoriesScreen,
   },
   defaultStackOptions,
 );
