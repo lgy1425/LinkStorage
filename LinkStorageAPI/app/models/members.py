@@ -21,6 +21,10 @@ class Member(Base, UserMixin):
         return cls.query.filter_by(device_id=device_id).first()
 
     @classmethod
+    def getUserId(cls, username):
+        return cls.query.filter_by(username=username).first()
+
+    @classmethod
     def save(cls, member):
         db.session.add(member)
         db.session.commit()
