@@ -7,12 +7,22 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {View, Text, ActivityIndicator, Platform} from 'react-native';
+import {View, ActivityIndicator, Platform} from 'react-native';
 import DefaultPreference from 'react-native-default-preference';
 import Contant from './constants/contant';
 import DeviceInfo from 'react-native-device-info';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import ReduxThunk from 'redux-thunk';
+import categoryReducer from './store/reducer/category';
 
 import LinkNavigation from './navigation/LinkNavigation';
+
+const rootReducer = combineReducers({
+  categories: categoryReducer,
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
   const [deviceLoaded, setDeviceLoaded] = useState(false);
@@ -34,7 +44,6 @@ export default function App() {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            console.log(responseJson.username);
             DefaultPreference.set('username', responseJson.username).then(
               function () {
                 setDeviceLoaded(true);
@@ -53,5 +62,9 @@ export default function App() {
     );
   }
 
-  return <LinkNavigation />;
+  return (
+    <Provider store={store}>
+      <LinkNavigation />
+    </Provider>
+  );
 }

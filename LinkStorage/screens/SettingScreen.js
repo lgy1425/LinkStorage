@@ -1,10 +1,26 @@
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {StyleSheet, ScrollView} from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import SettingRow from '../components/SettingRow';
+import * as categoryActions from '../store/action/category';
 
 const SettingScreen = (props) => {
+  const dispatch = useDispatch();
+
+  const loadCategories = useCallback(async () => {
+    try {
+      await dispatch(categoryActions.getCategories());
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadCategories().then(() => {});
+  }, [dispatch, loadCategories]);
+
   return (
     <ScrollView style={styles.wrapper}>
       <SettingRow
