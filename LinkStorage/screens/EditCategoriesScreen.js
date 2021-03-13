@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   View,
@@ -28,6 +28,12 @@ const EditCategoryScreen = (props) => {
     }
   }, [setInputColor, categories]);
 
+  const colorPickerHandler = () => {
+    props.navigation.navigate('CategoryColorPicker', {
+      setInputColor: setInputColor,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputRow}>
@@ -39,9 +45,9 @@ const EditCategoryScreen = (props) => {
 
         <View style={styles.colorWrapper}>
           <TouchableOpacity
-            style={[styles.colorTouch, {backgroundColor: inputColor}]}>
-            <View></View>
-          </TouchableOpacity>
+            style={[styles.colorTouch, {backgroundColor: inputColor}]}
+            onPress={colorPickerHandler}
+          />
         </View>
         <View style={styles.saveWrapper}>
           <TouchableOpacity>

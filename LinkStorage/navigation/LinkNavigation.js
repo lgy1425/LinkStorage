@@ -14,6 +14,7 @@ import FavListScreen from '../screens/FavListScreen';
 import SettingScreen from '../screens/SettingScreen';
 import AddLinkScreen from '../screens/AddLinkScreen';
 import EditCategoriesScreen from '../screens/EditCategoriesScreen';
+import CategoryColorPickerScreen from '../screens/CategoryColorPickerScreen';
 
 const defaultStackOptions = {
   defaultNavigationOptions: {
@@ -85,6 +86,7 @@ const SettingNavigator = createStackNavigator(
   {
     Setting: SettingScreen,
     EditCategories: EditCategoriesScreen,
+    CategoryColorPicker: CategoryColorPickerScreen,
   },
   defaultStackOptions,
 );
