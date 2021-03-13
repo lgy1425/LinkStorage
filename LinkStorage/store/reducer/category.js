@@ -1,4 +1,4 @@
-import {GET_CATEGORIES} from '../reducer/category';
+import {GET_CATEGORIES} from '../action/category';
 
 const initialState = {
   categories: null,

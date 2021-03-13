@@ -7,18 +7,14 @@ export const getCategories = () => {
   return async (dispatch, getState) => {
     try {
       const username = await DefaultPreference.get('username');
-      console.log(username, 'username');
       const response = await fetch(
         `${Contant.base_url}/link/get/categories?username=${username}`,
       );
-      console.log(response);
       if (!response.ok) {
         throw new Error('Network Error');
       }
 
       const resData = await response.json();
-
-      console.log(resData);
 
       if (resData.categories.length > 0) {
         dispatch({type: GET_CATEGORIES, categories: resData.categories});
