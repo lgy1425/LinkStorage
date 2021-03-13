@@ -1,23 +1,20 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  Button,
-} from 'react-native';
+import {View, StyleSheet, TextInput, FlatList, Alert} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Color from '../constants/color';
 
 import CategoryRow from '../components/CategoryRow';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import * as categoryActions from '../store/action/category';
+
 const EditCategoryScreen = (props) => {
+  const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
 
   const [inputColor, setInputColor] = useState('#ffffff');
+  const [inputName, setInputName] = useState('');
 
   useEffect(() => {
     for (let i = 0; i < Color.cColors.length; i++) {
@@ -34,12 +31,33 @@ const EditCategoryScreen = (props) => {
     });
   };
 
+  const onNameChangeHandler = (text) => {
+    setInputName(text);
+  };
+
+  const onSaveHandler = async () => {
+    if (inputName.length === 0 || inputName.length > 10) {
+      Alert.alert("Category name's length should be between 1 , 10", '', [
+        {text: 'OK'},
+      ]);
+    } else {
+      try {
+        await dispatch(categoryActions.createCategory(inputName, inputColor));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputRow}>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <TextInput style={styles.categoryInput} />
+            <TextInput
+              style={styles.categoryInput}
+              onChangeText={onNameChangeHandler}
+            />
           </View>
         </View>
 
@@ -50,7 +68,7 @@ const EditCategoryScreen = (props) => {
           />
         </View>
         <View style={styles.saveWrapper}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onSaveHandler}>
             <Icon
               style={styles.right}
               name="checkmark"

@@ -2,6 +2,7 @@ import Contant from '../../constants/contant';
 import DefaultPreference from 'react-native-default-preference';
 
 export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const CREATE_CATEGORY = 'CREATE_CATEGORY';
 
 export const getCategories = () => {
   return async (dispatch, getState) => {
@@ -34,8 +35,38 @@ export const getCategories = () => {
           },
         );
 
-        dispatch({type: GET_CATEGORIES, categories: [createResponse.category]});
+        const createData = await createResponse.json();
+
+        dispatch({type: GET_CATEGORIES, categories: [createData.category]});
       }
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const createCategory = (name, color) => {
+  return async (dispatch, getState) => {
+    try {
+      const username = await DefaultPreference.get('username');
+      const createResponse = await fetch(
+        `${Contant.base_url}/link/create/category`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            name: name,
+            color: color,
+          }),
+        },
+      );
+
+      const createData = await createResponse.json();
+
+      dispatch({type: CREATE_CATEGORY, category: createData.category});
     } catch (err) {
       throw err;
     }
