@@ -1,19 +1,107 @@
-import React from 'react';
-import {StyleSheet, View, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import Color from '../constants/color';
+
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const CategoryRow = (props) => {
+  const [inputName, setInputName] = useState(props.value);
+  const [inputColor, setInputColor] = useState(props.color);
+
+  const colorPickerHandler = () => {};
+  const onSaveHandler = () => {};
+
+  const onNameChangeHandler = (text) => {
+    console.log(text);
+    setInputName(text);
+  };
+
   return (
-    <View style={styles.wrapper}>
-      <TextInput value={'dd'} />
+    <View style={styles.inputRow}>
+      <View style={styles.inputContainer}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.categoryInput}
+            onChangeText={onNameChangeHandler}
+            value={inputName}
+          />
+        </View>
+      </View>
+
+      <View style={styles.colorWrapper}>
+        <TouchableOpacity
+          style={[styles.colorTouch, {backgroundColor: inputColor}]}
+          onPress={colorPickerHandler}
+        />
+      </View>
+      <View style={styles.saveWrapper}>
+        <TouchableOpacity onPress={onSaveHandler}>
+          <Icon
+            style={styles.right}
+            name="checkmark"
+            size={30}
+            color={Color.primaryColor}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onSaveHandler}>
+          <Icon
+            style={styles.right}
+            name="trash"
+            size={30}
+            color={Color.primaryColor}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  inputRow: {
     width: '100%',
     flexDirection: 'row',
-    height: 50,
+    height: 60,
+    backgroundColor: '#e3e3e3',
+  },
+  inputContainer: {
+    flex: 6,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputWrapper: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    borderBottomWidth: 1,
+    height: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+  },
+  categoryInput: {
+    height: 40,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1,
+  },
+  colorWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveWrapper: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  colorTouch: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#c0c0c0',
+    width: 35,
+    height: 35,
   },
 });
 

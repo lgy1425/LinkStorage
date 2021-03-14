@@ -57,6 +57,7 @@ const EditCategoryScreen = (props) => {
             <TextInput
               style={styles.categoryInput}
               onChangeText={onNameChangeHandler}
+              placeholder={"Input category's name"}
             />
           </View>
         </View>
@@ -81,7 +82,9 @@ const EditCategoryScreen = (props) => {
       <FlatList
         data={categories}
         keyExtractor={(item) => String(item.id)}
-        renderItem={(itemData) => <CategoryRow value={itemData.item.name} />}
+        renderItem={(itemData) => (
+          <CategoryRow value={itemData.item.name} color={itemData.item.color} />
+        )}
       />
     </View>
   );
@@ -105,9 +108,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
     backgroundColor: Color.gray,
+    borderBottomWidth: 1,
+    borderBottomColor: '#5e5e5e',
   },
   inputContainer: {
-    flex: 8,
+    flex: 6,
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',

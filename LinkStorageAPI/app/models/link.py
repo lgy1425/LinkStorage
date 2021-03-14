@@ -16,6 +16,10 @@ class Category(Base):
     deleted_at = Column(DateTime, nullable=True)
 
     @classmethod
+    def get(cls, id):
+        return cls.query.filter(cls.id == id).first()
+
+    @classmethod
     def getCategories(cls, user_id):
         return cls.query.filter(and_(cls.deleted_at == None, cls.user_id == user_id)).all()
 
@@ -42,3 +46,21 @@ class Category(Base):
             categories_json.append(cls.encode(c))
 
         return categories_json
+
+    @classmethod
+    def update(cls, id, name, color):
+        category = cls.query.filter(cls.id == id).first()
+        category.name = name
+        category.color = color
+        db.session.commit()
+
+        return category
+
+    @classmethod
+    def delete(cls, id):
+        category = cls.query.filter(cls.id == id).first()
+        category.deleted_at = datetime.now()
+
+        db.session.commit()
+
+        return category

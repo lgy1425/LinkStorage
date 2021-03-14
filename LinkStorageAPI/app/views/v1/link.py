@@ -33,3 +33,24 @@ def createCategory():
     return jsonify({
         "category": Category.encode(category)
     })
+
+
+@bp.route("/update/category", methods=["POST"])
+def updateCategory():
+
+    category = Category.update(int(request.json["id"]), request.json[
+                               "name"], request.json["color"])
+
+    return jsonify({
+        "category": Category.encode(category)
+    })
+
+
+@bp.route("/delete/category", methods=["POST"])
+def deleteCategory():
+
+    category = Category.delete(int(request.json["id"]))
+
+    return jsonify({
+        "category": Category.encode(category)
+    })
