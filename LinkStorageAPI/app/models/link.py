@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash
 
@@ -64,3 +64,42 @@ class Category(Base):
         db.session.commit()
 
         return category
+
+
+class Link(Base):
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey("member.id"))
+    url = Column(Text)
+    icon = Column(String(255))
+    title = Column(String(255))
+    description = Column(Text)
+    html = Column(Text)
+    category_id = Column(Integer, ForeignKey("category.id"))
+    star = Column(Boolean)
+    pdf_url = Column(String(255))
+
+    @classmethod
+    def encode(cls, link):
+        l_json = {
+            "id": link.id,
+            "url": link.url,
+            "icon": link.icon,
+            "title": link.title,
+            "description": link.description,
+            "html": link.html,
+            "category_id": link.category_id,
+            "start": link.star,
+            "pdf_url": link.pdf_url
+        }
+
+        return l_json
+
+    @classmethod
+    def encodes(cls, links):
+        links_json = []
+
+        for link in links:
+            links_json.append(cls.encode(link))
+
+        return links_json

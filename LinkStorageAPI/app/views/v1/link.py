@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request, Response
 from app.models.link import Category
 from app.models.members import Member
+import requests
+from bs4 import BeautifulSoup
 
 bp = Blueprint('v1_link', __name__, url_prefix='/v1/link')
 
@@ -54,3 +56,20 @@ def deleteCategory():
     return jsonify({
         "category": Category.encode(category)
     })
+
+
+@bp.route("/create/link", methods=["POST"])
+def createLink():
+    member = Member.getUserId(request.json["username"])
+
+    response = requests.get(requests.json["url"])
+    if response.ok:
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
+        title = soup.find("title").get_text()
+
+    l_obj = {
+        "user_id": member.id,
+        "url": request.json["url"],
+        "name": request.json["name"]
+    }
