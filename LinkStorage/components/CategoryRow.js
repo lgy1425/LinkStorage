@@ -1,18 +1,46 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import Color from '../constants/color';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import * as categoryActions from '../store/action/category';
+import Toast from 'react-native-toast-message';
 
 const CategoryRow = (props) => {
+  const dispatch = useDispatch();
   const [inputName, setInputName] = useState(props.value);
   const [inputColor, setInputColor] = useState(props.color);
 
-  const colorPickerHandler = () => {};
-  const onSaveHandler = () => {};
+  const colorPickerHandler = () => {
+    props.navigation.navigate('CategoryColorPicker', {
+      setInputColor: setInputColor,
+    });
+  };
+  const onSaveHandler = async () => {
+    try {
+      await dispatch(
+        categoryActions.updateCategory(props.id, inputName, inputColor),
+      );
+      Toast.show({
+        text1: 'Save!',
+        position: 'bottom',
+        visibilityTime: 1500,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onDeleteHandler = async () => {
+    try {
+      await dispatch(categoryActions.deleteCategory(props.id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const onNameChangeHandler = (text) => {
-    console.log(text);
     setInputName(text);
   };
 
@@ -43,7 +71,7 @@ const CategoryRow = (props) => {
             color={Color.primaryColor}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onSaveHandler}>
+        <TouchableOpacity onPress={onDeleteHandler}>
           <Icon
             style={styles.right}
             name="trash"

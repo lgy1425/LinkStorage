@@ -17,6 +17,7 @@ import ReduxThunk from 'redux-thunk';
 import categoryReducer from './store/reducer/category';
 
 import LinkNavigation from './navigation/LinkNavigation';
+import Toast from 'react-native-toast-message';
 
 const rootReducer = combineReducers({
   categories: categoryReducer,
@@ -65,6 +66,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <LinkNavigation />
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </Provider>
   );
 }

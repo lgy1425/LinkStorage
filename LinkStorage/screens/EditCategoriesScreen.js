@@ -42,6 +42,7 @@ const EditCategoryScreen = (props) => {
       ]);
     } else {
       try {
+        setInputName('');
         await dispatch(categoryActions.createCategory(inputName, inputColor));
       } catch (err) {
         console.log(err);
@@ -58,6 +59,7 @@ const EditCategoryScreen = (props) => {
               style={styles.categoryInput}
               onChangeText={onNameChangeHandler}
               placeholder={"Input category's name"}
+              value={inputName}
             />
           </View>
         </View>
@@ -83,7 +85,12 @@ const EditCategoryScreen = (props) => {
         data={categories}
         keyExtractor={(item) => String(item.id)}
         renderItem={(itemData) => (
-          <CategoryRow value={itemData.item.name} color={itemData.item.color} />
+          <CategoryRow
+            value={itemData.item.name}
+            color={itemData.item.color}
+            id={itemData.item.id}
+            navigation={props.navigation}
+          />
         )}
       />
     </View>
