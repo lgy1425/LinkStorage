@@ -13,6 +13,8 @@ RUN update-locale LANG=ko_KR.UTF-8
 
 RUN apt-get update && apt-get install python-dev libmysqlclient-dev -y
 
+RUN mkdir /usr/src/images
+
 RUN pip3 install --upgrade pip
 ADD . .
 RUN pip3 install -r requirements.txt

@@ -9,3 +9,5 @@ services:
       sh -c "gunicorn -b 0.0.0.0:8000 production:app"
     environment:
       - LC_ALL=C.UTF-8
+    volumes:
+      - /www/linkstorage_images:/usr/src/images

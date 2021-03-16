@@ -1,5 +1,6 @@
 from datetime import datetime
 from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text
+from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash
 
@@ -74,10 +75,13 @@ class Link(Base):
     icon = Column(String(255))
     title = Column(String(255))
     description = Column(Text)
-    html = Column(Text)
+    html = Column(LONGTEXT)
     category_id = Column(Integer, ForeignKey("category.id"))
-    star = Column(Boolean)
+    star = Column(Boolean, default=False)
     pdf_url = Column(String(255))
+    domain = Column(String(255))
+    innertext = Column(LONGTEXT)
+    deleted_at = Column(DateTime, nullable=True)
 
     @classmethod
     def encode(cls, link):
@@ -87,10 +91,10 @@ class Link(Base):
             "icon": link.icon,
             "title": link.title,
             "description": link.description,
-            "html": link.html,
             "category_id": link.category_id,
             "start": link.star,
-            "pdf_url": link.pdf_url
+            "pdf_url": link.pdf_url,
+            "domain": link.domain
         }
 
         return l_json
@@ -103,3 +107,8 @@ class Link(Base):
             links_json.append(cls.encode(link))
 
         return links_json
+
+    @classmethod
+    def save(cls, link):
+        db.session.add(link)
+        db.session.commit()
