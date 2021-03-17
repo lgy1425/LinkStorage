@@ -105,6 +105,10 @@ export const updateCategory = (id, name, color) => {
 export const deleteCategory = (id) => {
   return async (dispatch, getState) => {
     try {
+      if (getState().categories.categories.length <= 1) {
+        throw 'You should have more than one category';
+      }
+
       const deleteResponse = await fetch(
         `${Contant.base_url}/link/delete/category`,
         {

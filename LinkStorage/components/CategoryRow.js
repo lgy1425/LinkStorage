@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import Color from '../constants/color';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -36,7 +42,7 @@ const CategoryRow = (props) => {
     try {
       await dispatch(categoryActions.deleteCategory(props.id));
     } catch (err) {
-      console.log(err);
+      Alert.alert(err, '', [{text: 'Ok'}]);
     }
   };
 
