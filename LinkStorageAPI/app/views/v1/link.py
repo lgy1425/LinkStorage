@@ -5,7 +5,8 @@ from app.models.members import Member
 import requests
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
-from app.views.utils import random_char
+from app.views.utils import random_char, deEmojify
+
 
 bp = Blueprint('v1_link', __name__, url_prefix='/v1/link')
 
@@ -83,8 +84,9 @@ def createLink():
         html = html.replace("\t", "").replace("\n", "")
         soup = BeautifulSoup(html, "html.parser")
         title = soup.find("title").get_text()
-
+        html = deEmojify(html)
         innertext = soup.get_text()
+        innertext = deEmojify(innertext)
 
         fav_filename = random_char(12) + ".jpg"
 

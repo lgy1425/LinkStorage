@@ -6,18 +6,25 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Color from '../constants/color';
 
+import {validateUrl} from '../utils/util';
+import * as linkActions from '../store/action/link';
+
 const AddLinkScreen = (props) => {
+  const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
 
   const categoriesItems = categories.map((category, i) => {
     return {
       label: category.name,
-      value: category.name,
+      value: category.id,
       color: category.color,
     };
   });
@@ -28,6 +35,7 @@ const AddLinkScreen = (props) => {
 
   const [URL, setURL] = useState('');
   const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const URLChangeHandler = (text) => {
     setURL(text);
@@ -37,50 +45,82 @@ const AddLinkScreen = (props) => {
     setDescription(text);
   };
 
+  const saveLink = async () => {
+    if (!validateUrl(URL)) {
+      Alert.alert('Please enter validated URL', '', [{text: 'OK'}]);
+    } else {
+      setIsLoading(true);
+      try {
+        await dispatch(
+          linkActions.createLink(URL, selectedCategory, description),
+        );
+
+        props.navigation.goBack();
+      } catch (err) {
+        console.log(err);
+      }
+
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
-        <View style={styles.labelWrapper}>
-          <Text style={styles.label}>Select Category</Text>
-        </View>
-        <DropDownPicker
-          items={categoriesItems}
-          defaultValue={categoriesItems[0].value}
-          containerStyle={styles.containerStyle}
-          style={styles.dropdownstyle}
-          itemStyle={styles.itemStyle}
-          dropDownStyle={styles.dropDownStyle}
-          onChangeItem={(item) => setSelectedCategory(item.value)}
-        />
-        <View style={styles.labelWrapper}>
-          <Text style={styles.label}>URL</Text>
-        </View>
-        <View style={styles.formControl}>
-          <TextInput
-            style={styles.textInput}
-            value={URL}
-            onChangeText={URLChangeHandler}
-            autoCapitalize="none"
-            multiline={true}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior="padding"
+      keyboardVerticalOffset={100}>
+      <View style={styles.container}>
+        <ScrollView style={styles.scroll}>
+          <View style={styles.labelWrapper}>
+            <Text style={styles.label}>Select Category</Text>
+          </View>
+          <DropDownPicker
+            items={categoriesItems}
+            defaultValue={categoriesItems[0].value}
+            containerStyle={styles.containerStyle}
+            style={styles.dropdownstyle}
+            itemStyle={styles.itemStyle}
+            dropDownStyle={styles.dropDownStyle}
+            onChangeItem={(item) => setSelectedCategory(item.value)}
           />
-        </View>
-        <View style={styles.labelWrapper}>
-          <Text style={styles.label}>Description</Text>
-        </View>
-        <View style={styles.formControl}>
-          <TextInput
-            style={styles.textInput}
-            value={description}
-            onChangeText={descriptionChangeHandler}
-            autoCapitalize="none"
-            multiline={true}
-          />
-        </View>
-      </ScrollView>
-      <TouchableOpacity style={styles.saveBtn}>
-        <Text style={styles.saveTxt}>Save</Text>
-      </TouchableOpacity>
-    </View>
+          <View style={styles.labelWrapper}>
+            <Text style={styles.label}>URL</Text>
+          </View>
+          <View style={styles.formControl}>
+            <TextInput
+              style={styles.textInput}
+              value={URL}
+              onChangeText={URLChangeHandler}
+              autoCapitalize="none"
+              multiline={true}
+            />
+          </View>
+          <View style={styles.labelWrapper}>
+            <Text style={styles.label}>Description</Text>
+          </View>
+          <View style={styles.formControl}>
+            <TextInput
+              style={styles.textInput}
+              value={description}
+              onChangeText={descriptionChangeHandler}
+              autoCapitalize="none"
+              multiline={true}
+            />
+          </View>
+        </ScrollView>
+        <TouchableOpacity style={styles.saveBtn} onPress={saveLink}>
+          <Text style={styles.saveTxt}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -139,6 +179,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

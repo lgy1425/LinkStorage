@@ -15,12 +15,14 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import categoryReducer from './store/reducer/category';
+import linkReducer from './store/reducer/link';
 
 import LinkNavigation from './navigation/LinkNavigation';
 import Toast from 'react-native-toast-message';
 
 const rootReducer = combineReducers({
   categories: categoryReducer,
+  link: linkReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
