@@ -1,11 +1,14 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text,or_
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text, or_
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash
+from sqlalchemy.orm import relationship
 
 from app.extensions import db
 from app.models.base import Base
+
+from flask import jsonify
 
 
 class Category(Base):
@@ -85,7 +88,12 @@ class Link(Base):
     category = relationship("Category")
 
     @classmethod
+    def get(cls, id):
+        return cls.query.filter(cls.id == id).first()
+
+    @classmethod
     def encode(cls, link):
+
         l_json = {
             "id": link.id,
             "url": link.url,
@@ -96,12 +104,13 @@ class Link(Base):
             "star": link.star,
             "pdf_url": link.pdf_url,
             "domain": link.domain,
-            "category" : link.category
+            "category": {
+                "name": link.category.name,
+                "color": link.category.color
+            }
         }
 
         return l_json
-
-
 
     @classmethod
     def encodes(cls, links):
@@ -117,17 +126,15 @@ class Link(Base):
         db.session.add(link)
         db.session.commit()
 
-
     @classmethod
-    def update(cls,form) :
+    def update(cls, form):
         update_dict = {}
 
-        for key in ["url","icon","title","description","category_id","star","pdf_url","domain"] :
-            if key in form :
+        for key in ["url", "icon", "title", "description", "category_id", "star", "pdf_url", "domain", "html", "innertext"]:
+            if key in form:
                 update_dict[key] = form[key]
 
-
-        link = cls.query.filter(cls.id==int(form["id"])).first()
+        link = cls.query.filter(cls.id == int(form["id"])).first()
         link.update_with_dict(update_dict)
 
         db.session.commit()
@@ -144,18 +151,24 @@ class Link(Base):
         return link
 
     @classmethod
-    def getLinks(cls,args) :
-        q = cls.query.filter_by(and_(cls.user_id==int(args["user_id"]),cls.deleted_at.notnull()))
+    def getLinks(cls, args, user_id):
 
-        if "category_id" in args :
-            q = q.filter(cls.category_id==int(args["category_id"]))
-        if "search_key" in args and len(args["search_key"]) > 0 :
+        q = cls.query.filter(
+            and_(cls.user_id == user_id, cls.deleted_at == None))
+
+        if "category_id" in args:
+            q = q.filter(cls.category_id == int(args["category_id"]))
+        if "search_key" in args and len(args["search_key"]) > 0:
             search_key = args["search_key"]
-            q = q.filter_by(or_(cls.title.like("%"+s+"%"),cls.description.like("%"+s+"%"),cls.innertext.like("%"+s+"%"),cls.url.like("%"+s+"%")))
+            q = q.filter(or_(cls.title.like("%" + search_key + "%"), cls.description.like(
+                "%" + search_key + "%"), cls.innertext.like("%" + search_key + "%"), cls.url.like("%" + search_key + "%")))
 
-        q.join(Category,isouter=True)
+        offset = 0
+        limit = 10
 
-        return q.order_by(cls.updated_at.desc()).all()
+        if "offset" in args:
+            offset = int(args["offset"])
 
+        q.join(Category, isouter=True)
 
-
+        return q.order_by(cls.updated_at.desc()).offset(offset * limit).limit(limit).all()

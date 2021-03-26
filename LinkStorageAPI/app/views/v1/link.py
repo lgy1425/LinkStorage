@@ -72,23 +72,7 @@ def deleteLink():
     })
 
 
-@bp.route("/update/link",methods=["POST"])
-def updateLink() :
-
-    link = Link.update(request.json)
-
-    return jsonify({
-            "success": True,
-            "link": Link.encode(link)
-        })
-
-@bp.route("/create/link", methods=["POST"])
-def createLink():
-
-    member = Member.getUserId(request.json["username"])
-
-    url = request.json["url"]
-
+def parsingSite(url):
     domin = ""
     if url.startswith("http://"):
         domain = url[7:].split("?")[0].split("/")[0]
@@ -102,6 +86,8 @@ def createLink():
     if response.ok:
         html = response.text
         html = html.replace("\t", "").replace("\n", "")
+        print(html, "...")
+
         soup = BeautifulSoup(html, "html.parser")
         title = soup.find("title").get_text()
         html = deEmojify(html)
@@ -114,6 +100,41 @@ def createLink():
                     domain, "/usr/src/images/" + fav_filename)
 
         icon = "https://lsapi.ggpark.kr/images/" + fav_filename
+
+        return html, innertext, title, icon, domain
+
+
+@bp.route("/update/link", methods=["POST"])
+def updateLink():
+
+    link = Link.get(request.json["id"])
+
+    if "url" in request.json and link.url != request.json["url"]:
+        url = request.json["url"]
+
+        html, innertext, title, icon, domain = parsingSite(url)
+        request.json["html"] = html
+        request.json["innertext"] = innertext
+        request.json["title"] = title
+        request.json["icon"] = icon
+        request.json["domain"] = domain
+
+    link = Link.update(request.json)
+
+    return jsonify({
+        "success": True,
+        "link": Link.encode(link)
+    })
+
+
+@bp.route("/create/link", methods=["POST"])
+def createLink():
+
+    member = Member.getUserId(request.json["username"])
+
+    try:
+        url = request.json["url"]
+        html, innertext, title, icon, domain = parsingSite(url)
         category_id = request.json["category_id"]
         description = request.json["description"]
 
@@ -136,16 +157,17 @@ def createLink():
             "success": True,
             "link": Link.encode(link)
         })
-
-    else:
+    except:
         return jsonify({
             "success": False
         })
 
 
-@bp.route("/get/links",methods=["GET"])
-def getLinks() :
+@bp.route("/get/links", methods=["GET"])
+def getLinks():
 
-    links = Link.getLinks(request.args)
+    member = Member.getUserId(request.args["username"])
 
-    return jsonify({"links":links})
+    links = Link.getLinks(request.args, member.id)
+
+    return jsonify({"links": Link.encodes(links)})
