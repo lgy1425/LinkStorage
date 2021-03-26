@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text,or_
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash
@@ -82,6 +82,7 @@ class Link(Base):
     domain = Column(String(255))
     innertext = Column(LONGTEXT)
     deleted_at = Column(DateTime, nullable=True)
+    category = relationship("Category")
 
     @classmethod
     def encode(cls, link):
@@ -92,12 +93,15 @@ class Link(Base):
             "title": link.title,
             "description": link.description,
             "category_id": link.category_id,
-            "start": link.star,
+            "star": link.star,
             "pdf_url": link.pdf_url,
-            "domain": link.domain
+            "domain": link.domain,
+            "category" : link.category
         }
 
         return l_json
+
+
 
     @classmethod
     def encodes(cls, links):
@@ -112,3 +116,46 @@ class Link(Base):
     def save(cls, link):
         db.session.add(link)
         db.session.commit()
+
+
+    @classmethod
+    def update(cls,form) :
+        update_dict = {}
+
+        for key in ["url","icon","title","description","category_id","star","pdf_url","domain"] :
+            if key in form :
+                update_dict[key] = form[key]
+
+
+        link = cls.query.filter(cls.id==int(form["id"])).first()
+        link.update_with_dict(update_dict)
+
+        db.session.commit()
+
+        return link
+
+    @classmethod
+    def delete(cls, id):
+        link = cls.query.filter(cls.id == id).first()
+        link.deleted_at = datetime.now()
+
+        db.session.commit()
+
+        return link
+
+    @classmethod
+    def getLinks(cls,args) :
+        q = cls.query.filter_by(and_(cls.user_id==int(args["user_id"]),cls.deleted_at.notnull()))
+
+        if "category_id" in args :
+            q = q.filter(cls.category_id==int(args["category_id"]))
+        if "search_key" in args and len(args["search_key"]) > 0 :
+            search_key = args["search_key"]
+            q = q.filter_by(or_(cls.title.like("%"+s+"%"),cls.description.like("%"+s+"%"),cls.innertext.like("%"+s+"%"),cls.url.like("%"+s+"%")))
+
+        q.join(Category,isouter=True)
+
+        return q.order_by(cls.updated_at.desc()).all()
+
+
+

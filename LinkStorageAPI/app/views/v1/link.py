@@ -62,6 +62,26 @@ def deleteCategory():
     })
 
 
+@bp.route("/delete/link", methods=["POST"])
+def deleteLink():
+
+    link = Link.delete(int(request.json["id"]))
+
+    return jsonify({
+        "link": Link.encode(link)
+    })
+
+
+@bp.route("/update/link",methods=["POST"])
+def updateLink() :
+
+    link = Link.update(request.json)
+
+    return jsonify({
+            "success": True,
+            "link": Link.encode(link)
+        })
+
 @bp.route("/create/link", methods=["POST"])
 def createLink():
 
@@ -121,3 +141,11 @@ def createLink():
         return jsonify({
             "success": False
         })
+
+
+@bp.route("/get/links",methods=["GET"])
+def getLinks() :
+
+    links = Link.getLinks(request.args)
+
+    return jsonify({"links":links})
