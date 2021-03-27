@@ -1,18 +1,34 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Keyboard,
+} from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import * as categoryActions from '../store/action/category';
+import * as linkActions from '../store/action/link';
 
 import {Searchbar} from 'react-native-paper';
 
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import LinkCard from '../components/LinkCard';
+import {FlatList} from 'react-native';
+
 const LinkListScreen = (props) => {
   const [searchKey, setSearchKey] = useState('');
   const [filteredCategory, setFilteredCategory] = useState(null);
+  const [offset, setOffset] = useState(0);
+
+  const currentSearchKey = useSelector((state) => state.link.currentSearchKey);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -24,15 +40,72 @@ const LinkListScreen = (props) => {
     }
   }, [dispatch]);
 
+  const loadLinks = useCallback(async () => {
+    try {
+      let category_id = null;
+      if (filteredCategory) {
+        category_id = filteredCategory.id;
+      }
+
+      await dispatch(
+        linkActions.getLinks(offset, currentSearchKey, category_id),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dispatch, filteredCategory, offset, currentSearchKey]);
+
   useEffect(() => {
+    setIsLoading(true);
     loadCategories().then(() => {});
-  }, [dispatch, loadCategories]);
+    loadLinks().then(() => {
+      setIsLoading(false);
+    });
+  }, [dispatch, loadCategories, loadLinks]);
 
   useEffect(() => {
-    console.log('change filtercategory');
-  }, [filteredCategory]);
+    if (filteredCategory) {
+      setIsLoading(true);
+      setOffset(0);
+      dispatch(
+        linkActions.getLinks(offset, currentSearchKey, filteredCategory.id),
+      ).then(() => {
+        setIsLoading(false);
+      });
+    }
+  }, [dispatch, filteredCategory, currentSearchKey, offset]);
 
-  const onChangeSearch = (text) => setSearchKey(text);
+  const links = useSelector((state) => state.link.links);
+
+  const onChangeSearch = (text) => {
+    setSearchKey(text);
+    if (text.length === 0) {
+      if (currentSearchKey && currentSearchKey.length > 0) {
+        setOffset(0);
+        dispatch(linkActions.setCurrentSearchKey(text));
+      }
+    }
+  };
+
+  const search = () => {
+    Keyboard.dismiss();
+    setOffset(0);
+    dispatch(linkActions.setCurrentSearchKey(searchKey));
+  };
+
+  let linkCards = null;
+
+  if (links) {
+    linkCards = (
+      <FlatList
+        data={links}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={(itemData) => (
+          <LinkCard link={itemData.item} navigation={props.navigation} />
+        )}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -45,7 +118,7 @@ const LinkListScreen = (props) => {
           />
         </View>
         <View style={styles.SearchButtonWrapper}>
-          <Button mode="contained" style={styles.searchBtn}>
+          <Button mode="contained" style={styles.searchBtn} onPress={search}>
             <Icon name="md-search" size={20} />
           </Button>
         </View>
@@ -82,6 +155,28 @@ const LinkListScreen = (props) => {
           </View>
         )}
       </TouchableOpacity>
+
+      {links && !isLoading ? (
+        links.length === 0 ? (
+          <View style={styles.centered}>
+            <View>
+              <Text>Please Add Links</Text>
+              <Button
+                onPress={() => {
+                  props.navigation.navigate('AddLink');
+                }}>
+                Add Link
+              </Button>
+            </View>
+          </View>
+        ) : (
+          <View>{linkCards}</View>
+        )
+      ) : (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
+      )}
     </View>
   );
 };
@@ -120,6 +215,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     height: '100%',
+    paddingBottom: 100,
   },
   searchBarContainer: {
     flexDirection: 'row',
@@ -182,6 +278,11 @@ const styles = StyleSheet.create({
   nameWrapper: {
     justifyContent: 'center',
     marginLeft: 20,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

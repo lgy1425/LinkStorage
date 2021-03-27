@@ -86,18 +86,16 @@ def parsingSite(url):
     if response.ok:
         html = response.text
         html = html.replace("\t", "").replace("\n", "")
-        print(html, "...")
 
         soup = BeautifulSoup(html, "html.parser")
         title = soup.find("title").get_text()
         html = deEmojify(html)
         innertext = soup.get_text()
-        innertext = deEmojify(innertext)
 
         fav_filename = random_char(12) + ".jpg"
 
-        urlretrieve("https://www.google.com/s2/favicons?domain=" +
-                    domain, "/usr/src/images/" + fav_filename)
+        # urlretrieve("https://www.google.com/s2/favicons?domain=" +
+        #             domain, "/usr/src/images/" + fav_filename)
 
         icon = "https://lsapi.ggpark.kr/images/" + fav_filename
 
