@@ -93,9 +93,11 @@ def parsingSite(url):
         innertext = soup.get_text()
 
         fav_filename = random_char(12) + ".jpg"
-
-        # urlretrieve("https://www.google.com/s2/favicons?domain=" +
-        #             domain, "/usr/src/images/" + fav_filename)
+        try:
+            urlretrieve("https://www.google.com/s2/favicons?domain=" +
+                        domain, "/usr/src/images/" + fav_filename)
+        except:
+            continue
 
         icon = "https://lsapi.ggpark.kr/images/" + fav_filename
 
