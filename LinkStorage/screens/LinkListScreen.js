@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import * as categoryActions from '../store/action/category';
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const LinkListScreen = (props) => {
   const [searchKey, setSearchKey] = useState('');
+  const [filteredCategory, setFilteredCategory] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -26,6 +27,10 @@ const LinkListScreen = (props) => {
   useEffect(() => {
     loadCategories().then(() => {});
   }, [dispatch, loadCategories]);
+
+  useEffect(() => {
+    console.log('change filtercategory');
+  }, [filteredCategory]);
 
   const onChangeSearch = (text) => setSearchKey(text);
 
@@ -45,6 +50,38 @@ const LinkListScreen = (props) => {
           </Button>
         </View>
       </View>
+      <TouchableOpacity
+        style={styles.filterCategoryRow}
+        onPress={() => {
+          props.navigation.navigate('FilterCategory', {
+            setFilteredCategory: setFilteredCategory,
+          });
+        }}>
+        {filteredCategory ? (
+          <View style={styles.filterCategoryRow}>
+            <View style={styles.colorWrapper}>
+              <View
+                style={[
+                  styles.colorTouch,
+                  {backgroundColor: filteredCategory.color},
+                ]}
+              />
+            </View>
+            <View style={styles.nameWrapper}>
+              <Text>{filteredCategory.name}</Text>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.filterCategoryWrapper}>
+            <Text style={styles.selectFilterText}>
+              <Icon name="md-filter" size={16} />
+            </Text>
+            <Text style={styles.selectFilterText}>
+              Select Filtered Category
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -108,6 +145,43 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  filterCategoryRow: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: '#c0c0c0',
+    flexDirection: 'row',
+  },
+  filterCategoryWrapper: {
+    flexDirection: 'row',
+    color: '#fff',
+    width: 180,
+    justifyContent: 'space-between',
+  },
+  selectFilterText: {
+    color: '#909090',
+  },
+  categoryRow: {
+    width: '100%',
+    flexDirection: 'row',
+    height: 60,
+    backgroundColor: '#fcfcfc',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  colorTouch: {
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#c0c0c0',
+    width: 30,
+    height: 30,
+  },
+  nameWrapper: {
+    justifyContent: 'center',
+    marginLeft: 20,
   },
 });
 
