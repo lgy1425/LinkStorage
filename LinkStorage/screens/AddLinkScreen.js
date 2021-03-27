@@ -57,7 +57,7 @@ const AddLinkScreen = (props) => {
 
         props.navigation.goBack();
       } catch (err) {
-        console.log(err);
+        Alert.alert('This is invalid site for saving', '', [{text: 'OK'}]);
       }
 
       setIsLoading(false);

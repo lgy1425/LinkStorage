@@ -27,6 +27,10 @@ export const createLink = (url, category_id, description) => {
 
       const createData = await createResponse.json();
 
+      if (!createData.success) {
+        throw 'Error';
+      }
+
       dispatch({type: CREATE_LINK, result: createData});
     } catch (err) {
       throw err;
