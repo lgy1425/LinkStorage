@@ -97,7 +97,7 @@ def parsingSite(url):
             urlretrieve("https://www.google.com/s2/favicons?domain=" +
                         domain, "/usr/src/images/" + fav_filename)
         except:
-            continue
+            print("Here is local")
 
         icon = "https://lsapi.ggpark.kr/images/" + fav_filename
 
