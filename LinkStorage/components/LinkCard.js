@@ -29,7 +29,7 @@ const LinkCard = (props) => {
   };
 
   const goToDetail = () => {
-    props.navigation.navigate('LinkDetail', {link: props.link});
+    props.navigation.navigate('LinkDetail', {linkId: props.link.id});
   };
 
   return (
