@@ -171,3 +171,9 @@ def getLinks():
     links = Link.getLinks(request.args, member.id)
 
     return jsonify({"links": Link.encodes(links)})
+
+@bp.route("/get/link")
+def getLink() :
+    link = Link.get(int(request.args["id"]))
+
+    return jsonify({"link":Link.encode(link)})
