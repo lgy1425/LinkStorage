@@ -4,6 +4,7 @@ import DefaultPreference from 'react-native-default-preference';
 export const CREATE_LINK = 'CREATE_LINK';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_CURRENT_SEARCHKEY = 'SET_CURRENT_SEARCHKEY';
+export const DELETE_LINK = 'DELETE_LINK';
 
 export const UPDATE_LINK = 'UPDATE_LINK';
 
@@ -94,6 +95,25 @@ export const updateStar = (id, star) => {
       const resData = await res.json();
 
       dispatch({type: UPDATE_LINK, link: resData.link});
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const deleteLink = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      await fetch(`${Contant.base_url}/link/delete/link`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      });
+      dispatch({type: DELETE_LINK, linkId: id});
     } catch (err) {
       throw err;
     }

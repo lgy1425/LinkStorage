@@ -1,5 +1,6 @@
 import {
   CREATE_LINK,
+  DELETE_LINK,
   GET_LINKS,
   SET_CURRENT_SEARCHKEY,
   UPDATE_LINK,
@@ -29,6 +30,12 @@ export default (state = initialState, action) => {
         updatedLinks[index] = action.link;
       }
       return {...state, links: updatedLinks};
+
+    case DELETE_LINK:
+      return {
+        ...state,
+        links: state.links.filter((link) => link.id !== action.linkId),
+      };
     default:
       return state;
   }

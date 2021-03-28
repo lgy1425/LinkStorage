@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import SQLite from 'react-native-sqlite-storage';
 
 SQLite.DEBUG(true);

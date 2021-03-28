@@ -8,6 +8,7 @@ import {
   Image,
   Linking,
   Share,
+  Alert,
 } from 'react-native';
 import Contant from '../constants/contant';
 
@@ -39,7 +40,7 @@ const LinkDetailScreen = (props) => {
     const resData = await response.json();
 
     setLink(resData.link);
-  }, []);
+  }, [props.navigation]);
 
   const openBrowser = useCallback(async (url) => {
     const supported = await Linking.canOpenURL(url);
@@ -78,6 +79,23 @@ const LinkDetailScreen = (props) => {
         link.category.color,
       );
     }
+  };
+
+  const onDeleteHandler = async () => {
+    Alert.alert('Warning', 'Do you want delete this link?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          await dispatch(linkActions.deleteLink(link.id));
+          await db.deleteLink(link.id);
+          props.navigation.goBack();
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -145,7 +163,7 @@ const LinkDetailScreen = (props) => {
               <MaterialIcon
                 name={'delete'}
                 size={20}
-                onPress={() => onShare(link.url)}
+                onPress={onDeleteHandler}
               />
             </Button>
             <Button
