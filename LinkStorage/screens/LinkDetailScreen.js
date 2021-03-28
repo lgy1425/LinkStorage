@@ -1,7 +1,17 @@
 import React, {useEffect, useState, useCallback} from 'react';
 
-import {View, Text, ActivityIndicator, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  Image,
+  Linking,
+  Share,
+} from 'react-native';
 import Contant from '../constants/contant';
+
+import {useDispatch} from 'react-redux';
 
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,8 +21,13 @@ import Color from '../constants/color';
 
 import {WebView} from 'react-native-webview';
 
+import * as db from '../helper/db';
+import * as linkActions from '../store/action/link';
+
 const LinkDetailScreen = (props) => {
+  const dispatch = useDispatch();
   const [link, setLink] = useState(null);
+  const [isStar, setIsStar] = useState(0);
 
   const fetchLink = useCallback(async () => {
     const response = await fetch(
@@ -26,9 +41,54 @@ const LinkDetailScreen = (props) => {
     setLink(resData.link);
   }, []);
 
+  const openBrowser = useCallback(async (url) => {
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  }, []);
+
+  const onShare = async (url) => {
+    try {
+      await Share.share({
+        message: url,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const onStartChangeHandler = async () => {
+    if (isStar) {
+      setIsStar(0);
+      await dispatch(linkActions.updateStar(link.id, 0));
+      await db.deleteLink(link.id);
+    } else {
+      setIsStar(1);
+      await dispatch(linkActions.updateStar(link.id, 1));
+      await db.insertLink(
+        link.id,
+        link.url,
+        link.domain,
+        link.title,
+        link.description,
+        link.category_id,
+        link.category.name,
+        link.category.color,
+      );
+    }
+  };
+
   useEffect(() => {
     fetchLink();
   }, [fetchLink]);
+
+  useEffect(() => {
+    if (link) {
+      setIsStar(link.star);
+    }
+  }, [link]);
 
   if (link) {
     return (
@@ -50,7 +110,7 @@ const LinkDetailScreen = (props) => {
         <View style={styles.buttonWrapper}>
           <View style={styles.buttonRow}>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}
               onPress={() => {
@@ -59,7 +119,7 @@ const LinkDetailScreen = (props) => {
               <Icon name={'md-share'} size={20} />
             </Button>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}>
               <Icon
@@ -69,7 +129,7 @@ const LinkDetailScreen = (props) => {
               />
             </Button>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}>
               <MaterialIcon
@@ -79,7 +139,7 @@ const LinkDetailScreen = (props) => {
               />
             </Button>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}>
               <MaterialIcon
@@ -89,11 +149,31 @@ const LinkDetailScreen = (props) => {
               />
             </Button>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}>
               <MaterialIcon
                 name={'file-download'}
+                size={20}
+                onPress={() => onShare(link.url)}
+              />
+            </Button>
+            <Button
+              mode="text"
+              color={Color.primaryColor}
+              style={styles.button}>
+              <MaterialIcon
+                name={isStar ? 'star' : 'star-border'}
+                size={20}
+                onPress={() => onStartChangeHandler()}
+              />
+            </Button>
+            <Button
+              mode="text"
+              color={Color.primaryColor}
+              style={styles.button}>
+              <Icon
+                name={'md-notifications-outline'}
                 size={20}
                 onPress={() => onShare(link.url)}
               />

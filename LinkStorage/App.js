@@ -20,6 +20,8 @@ import linkReducer from './store/reducer/link';
 import LinkNavigation from './navigation/LinkNavigation';
 import Toast from 'react-native-toast-message';
 
+import * as db from './helper/db';
+
 const rootReducer = combineReducers({
   categories: categoryReducer,
   link: linkReducer,
@@ -55,6 +57,8 @@ export default function App() {
           });
       }
     });
+
+    db.createTable();
   }, []);
 
   if (!deviceLoaded) {

@@ -17,6 +17,8 @@ import Color from '../constants/color';
 import {validateUrl} from '../utils/util';
 import * as linkActions from '../store/action/link';
 
+
+
 const AddLinkScreen = (props) => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
@@ -36,6 +38,9 @@ const AddLinkScreen = (props) => {
   const [URL, setURL] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+
+
 
   const URLChangeHandler = (text) => {
     setURL(text);
@@ -45,6 +50,7 @@ const AddLinkScreen = (props) => {
     setDescription(text);
   };
 
+  
   const saveLink = async () => {
     if (!validateUrl(URL)) {
       Alert.alert('Please enter validated URL', '', [{text: 'OK'}]);

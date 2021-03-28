@@ -5,6 +5,8 @@ export const CREATE_LINK = 'CREATE_LINK';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_CURRENT_SEARCHKEY = 'SET_CURRENT_SEARCHKEY';
 
+export const UPDATE_LINK = 'UPDATE_LINK';
+
 export const createLink = (url, category_id, description) => {
   return async (dispatch, getState) => {
     try {
@@ -72,5 +74,28 @@ export const getLinks = (offset, search_key, category_id) => {
 export const setCurrentSearchKey = (search_key) => {
   return (dispatch, getState) => {
     dispatch({type: SET_CURRENT_SEARCHKEY, search_key: search_key});
+  };
+};
+
+export const updateStar = (id, star) => {
+  return async (dispatch, getState) => {
+    try {
+      const res = await fetch(`${Contant.base_url}/link/update/link`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+          star: star,
+        }),
+      });
+
+      const resData = await res.json();
+
+      dispatch({type: UPDATE_LINK, link: resData.link});
+    } catch (err) {
+      throw err;
+    }
   };
 };

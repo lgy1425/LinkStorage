@@ -16,6 +16,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* LinkStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LinkStorageTests.m */; };
 		4F1789017346444BC7D94880 /* libPods-LinkStorage-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A54CA0DFBCB08514560E91D /* libPods-LinkStorage-tvOSTests.a */; };
+		7F16476F26105673009B12C7 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 7F16476E26105673009B12C7 /* www */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85D1A9892389E80B9C66DF2A /* libPods-LinkStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14508CBA5E97C124A521BA94 /* libPods-LinkStorage.a */; };
 		9D29F7273132AECF120C2502 /* libPods-LinkStorage-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BDE417919B5214F68F8C67 /* libPods-LinkStorage-tvOS.a */; };
@@ -59,6 +60,7 @@
 		52761CC994941012483A0CE2 /* Pods-LinkStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage.debug.xcconfig"; path = "Target Support Files/Pods-LinkStorage/Pods-LinkStorage.debug.xcconfig"; sourceTree = "<group>"; };
 		641521290D2F40F5D9BDD013 /* libPods-LinkStorage-LinkStorageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkStorage-LinkStorageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		778BCA917196231DCDF356C8 /* Pods-LinkStorage-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-LinkStorage-tvOSTests/Pods-LinkStorage-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		7F16476E26105673009B12C7 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = LinkStorage/www; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LinkStorage/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A54CA0DFBCB08514560E91D /* libPods-LinkStorage-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkStorage-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B81741B218270E53C55E205 /* Pods-LinkStorage-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-LinkStorage-tvOS/Pods-LinkStorage-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* LinkStorage */ = {
 			isa = PBXGroup;
 			children = (
+				7F16476E26105673009B12C7 /* www */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -148,7 +151,6 @@
 				13AD1590E8E55FFD3C146C45 /* Pods-LinkStorage-tvOSTests.debug.xcconfig */,
 				778BCA917196231DCDF356C8 /* Pods-LinkStorage-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -340,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F16476F26105673009B12C7 /* www in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
