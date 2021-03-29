@@ -8,7 +8,6 @@ from urllib.request import urlretrieve
 from app.views.utils import random_char, deEmojify
 import subprocess
 
-
 bp = Blueprint('v1_link', __name__, url_prefix='/v1/link')
 
 
@@ -173,6 +172,13 @@ def getLinks():
     links = Link.getLinks(request.args, member.id)
 
     return jsonify({"links": Link.encodes(links)})
+
+
+@bp.route("/get/link")
+def getLink():
+    link = Link.get(int(request.args["id"]))
+
+    return jsonify({"link": Link.encode(link)})
 
 
 @bp.route("/set/pdf")

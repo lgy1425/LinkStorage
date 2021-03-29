@@ -25,6 +25,8 @@ import {WebView} from 'react-native-webview';
 import * as db from '../helper/db';
 import * as linkActions from '../store/action/link';
 
+import RNFetchBlob from 'rn-fetch-blob';
+
 const LinkDetailScreen = (props) => {
   const dispatch = useDispatch();
   const [link, setLink] = useState(null);
@@ -100,6 +102,38 @@ const LinkDetailScreen = (props) => {
         },
       },
     ]);
+  };
+
+  const downloadPDF = async () => {
+    let url;
+
+    if (link.pdf_url && link.pdf_url.length > 0) {
+      url = link.pdf_url;
+    } else {
+      const response = await fetch(
+        `${Contant.base_url}/link/set/pdf?id=${link.id}`,
+      );
+
+      const resData = await response.json();
+      url = resData.pdf_url;
+    }
+
+    const {config, fs} = RNFetchBlob;
+    let DocumentDir = fs.dirs.dirs.DocumentDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: false,
+        path: DocumentDir,
+        description: 'Downloading PDF file.',
+      },
+    };
+    config(options)
+      .fetch('GET', url)
+      .then(() => {
+        console.log('download complete');
+      });
   };
 
   useEffect(() => {
@@ -178,7 +212,7 @@ const LinkDetailScreen = (props) => {
               <MaterialIcon
                 name={'file-download'}
                 size={20}
-                onPress={() => onShare(link.url)}
+                onPress={downloadPDF}
               />
             </Button>
             <Button
