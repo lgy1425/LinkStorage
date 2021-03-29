@@ -188,10 +188,10 @@ def setPDF():
     if link.pdf_url and len(link.pdf_url) > 0:
         return jsonify({"pdf_url": link.pdf_url})
     else:
-        # subprocess.call(['xvfb-run', 'wkhtmltopdf', link.url, str(link.id) + '.pdf'],
-        #                 cwd="/usr/src/images/")
-        subprocess.call(['wkhtmltopdf', link.url, str(link.id) + '.pdf'],
-                        cwd="/Users/mediwhale/Downloads/100samples/")
+        subprocess.call(['xvfb-run', 'wkhtmltopdf', link.url, str(link.id) + '.pdf'],
+                        cwd="/usr/src/images/")
+        # subprocess.call(['wkhtmltopdf', link.url, str(link.id) + '.pdf'],
+        #                 cwd="/Users/mediwhale/Downloads/100samples/")
 
         pdf_url = "https://lsapi.ggpark.kr/images/" + str(link.id) + '.pdf'
 
