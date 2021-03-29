@@ -9,6 +9,8 @@ import {
   Linking,
   Share,
   Alert,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import Contant from '../constants/contant';
 
@@ -118,21 +120,49 @@ const LinkDetailScreen = (props) => {
       url = resData.pdf_url;
     }
 
+    if (Platform.os === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'Application needs access to your storage to download File',
+          },
+        );
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          // Start downloading
+          return;
+        } else {
+          // If permission denied then show alert
+          Alert.alert('Error', 'Storage Permission Not Granted');
+        }
+      } catch (err) {
+        // To handle permission related exception
+        console.log('++++' + err);
+      }
+    }
+
     const {config, fs} = RNFetchBlob;
-    let DocumentDir = fs.dirs.dirs.DocumentDir;
+    let DocumentDir = fs.dirs.DownloadDir;
     let options = {
       fileCache: true,
       addAndroidDownloads: {
         useDownloadManager: true,
-        notification: false,
-        path: DocumentDir,
+        notification: true,
+        path: DocumentDir + '/file_' + link.id + '.pdf',
         description: 'Downloading PDF file.',
       },
     };
     config(options)
       .fetch('GET', url)
-      .then(() => {
-        console.log('download complete');
+      .then((res) => {
+        console.log('res -> ', JSON.stringify(res));
+        Alert.alert('File Download Success', 'Please check your file system', [
+          {
+            text: 'OK',
+          },
+        ]);
       });
   };
 
