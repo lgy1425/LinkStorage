@@ -101,6 +101,31 @@ export const updateStar = (id, star) => {
   };
 };
 
+export const updateLink = (id, url, category_id, description) => {
+  return async (dispatch, getState) => {
+    try {
+      const res = await fetch(`${Contant.base_url}/link/update/link`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: id,
+          description: description,
+          url: url,
+          category_id: category_id,
+        }),
+      });
+
+      const resData = await res.json();
+
+      dispatch({type: UPDATE_LINK, link: resData.link});
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
 export const deleteLink = (id) => {
   return async (dispatch, getState) => {
     try {

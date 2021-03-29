@@ -45,6 +45,7 @@ const FavNavigation = createStackNavigator(
   {
     FavList: FavListScreen,
     AddLink: AddLinkScreen,
+    LinkDetail: LinkDetailScreen,
   },
   defaultStackOptions,
 );

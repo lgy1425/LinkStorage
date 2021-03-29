@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
 from app.views.utils import random_char, deEmojify
+import subprocess
 
 
 bp = Blueprint('v1_link', __name__, url_prefix='/v1/link')
@@ -118,6 +119,7 @@ def updateLink():
         request.json["title"] = title
         request.json["icon"] = icon
         request.json["domain"] = domain
+        request.json["pdf_url"] = ""
 
     link = Link.update(request.json)
 
@@ -172,8 +174,19 @@ def getLinks():
 
     return jsonify({"links": Link.encodes(links)})
 
-@bp.route("/get/link")
-def getLink() :
+
+@bp.route("/set/pdf")
+def setPDF():
     link = Link.get(int(request.args["id"]))
 
-    return jsonify({"link":Link.encode(link)})
+    if link.pdf_url and link.pdf_url.length > 0:
+        return jsonify({"pdf_url": link.pdf_url})
+    else:
+        subprocess.call(['xvfb-run', 'wkhtmltopdf', link.url, str(link.id) + '.pdf'],
+                        cwd="/usr/src/images/")
+
+        pdf_url = "https://lsapi.ggpark.kr/images/" + str(link.id) + '.pdf'
+
+        Link.update({"id": link.id, "pdf_url": pdf_url})
+
+        return jsonify({"pdf_url": pdf_url})

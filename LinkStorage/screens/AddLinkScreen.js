@@ -17,11 +17,11 @@ import Color from '../constants/color';
 import {validateUrl} from '../utils/util';
 import * as linkActions from '../store/action/link';
 
-
-
 const AddLinkScreen = (props) => {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
+
+  const updatedLink = props.navigation.getParam('link');
 
   const categoriesItems = categories.map((category, i) => {
     return {
@@ -32,15 +32,14 @@ const AddLinkScreen = (props) => {
   });
 
   const [selectedCategory, setSelectedCategory] = useState(
-    categoriesItems[0].value,
+    updatedLink ? updatedLink.category_id : categoriesItems[0].value,
   );
 
-  const [URL, setURL] = useState('');
-  const [description, setDescription] = useState('');
+  const [URL, setURL] = useState(updatedLink ? updatedLink.url : '');
+  const [description, setDescription] = useState(
+    updatedLink ? updatedLink.description : '',
+  );
   const [isLoading, setIsLoading] = useState(false);
-  
-
-
 
   const URLChangeHandler = (text) => {
     setURL(text);
@@ -50,20 +49,37 @@ const AddLinkScreen = (props) => {
     setDescription(text);
   };
 
-  
   const saveLink = async () => {
     if (!validateUrl(URL)) {
       Alert.alert('Please enter validated URL', '', [{text: 'OK'}]);
     } else {
       setIsLoading(true);
-      try {
-        await dispatch(
-          linkActions.createLink(URL, selectedCategory, description),
-        );
 
-        props.navigation.goBack();
-      } catch (err) {
-        Alert.alert('This is invalid site for saving', '', [{text: 'OK'}]);
+      if (updatedLink) {
+        try {
+          await dispatch(
+            linkActions.updateLink(
+              updatedLink.id,
+              URL,
+              selectedCategory,
+              description,
+            ),
+          );
+
+          props.navigation.goBack();
+        } catch (err) {
+          Alert.alert('This is invalid site for saving', '', [{text: 'OK'}]);
+        }
+      } else {
+        try {
+          await dispatch(
+            linkActions.createLink(URL, selectedCategory, description),
+          );
+
+          props.navigation.goBack();
+        } catch (err) {
+          Alert.alert('This is invalid site for saving', '', [{text: 'OK'}]);
+        }
       }
 
       setIsLoading(false);
@@ -90,7 +106,9 @@ const AddLinkScreen = (props) => {
           </View>
           <DropDownPicker
             items={categoriesItems}
-            defaultValue={categoriesItems[0].value}
+            defaultValue={
+              updatedLink ? updatedLink.category_id : categoriesItems[0].value
+            }
             containerStyle={styles.containerStyle}
             style={styles.dropdownstyle}
             itemStyle={styles.itemStyle}

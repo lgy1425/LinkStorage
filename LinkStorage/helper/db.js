@@ -194,7 +194,16 @@ export const selectLinks = async () => {
         const rows = results.rows;
         for (var i = 0; i < rows.length; i++) {
           links.push({
-            ...rows.item(i),
+            id: rows.item(i).id,
+            title: rows.item(i).title,
+            url: rows.item(i).url,
+            description: rows.item(i).description,
+            domain: rows.item(i).domain,
+            category_id: rows.item(i).category_id,
+            category: {
+              color: rows.item(i).category_color,
+              name: rows.item(i).category_name,
+            },
           });
         }
       },

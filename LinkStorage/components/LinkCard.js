@@ -61,21 +61,21 @@ const LinkCard = (props) => {
           </View>
           <View style={styles.buttons}>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}
               onPress={() => {
                 openBrowser(props.link.url);
               }}>
-              <Icon name={'md-share'} size={20} />
+              <Icon name={'md-share'} size={25} />
             </Button>
             <Button
-              mode="contained"
+              mode="text"
               color={Color.primaryColor}
               style={styles.button}>
               <Icon
                 name={'share-social'}
-                size={20}
+                size={25}
                 onPress={() => onShare(props.link.url)}
               />
             </Button>

@@ -81,6 +81,10 @@ const LinkDetailScreen = (props) => {
     }
   };
 
+  const goToUpdate = () => {
+    props.navigation.navigate('AddLink', {link: link});
+  };
+
   const onDeleteHandler = async () => {
     Alert.alert('Warning', 'Do you want delete this link?', [
       {
@@ -100,7 +104,12 @@ const LinkDetailScreen = (props) => {
 
   useEffect(() => {
     fetchLink();
-  }, [fetchLink]);
+
+    const willFocusSub = props.navigation.addListener('willFocus', fetchLink);
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [fetchLink, props.navigation]);
 
   useEffect(() => {
     if (link) {
@@ -150,11 +159,7 @@ const LinkDetailScreen = (props) => {
               mode="text"
               color={Color.primaryColor}
               style={styles.button}>
-              <MaterialIcon
-                name={'edit'}
-                size={20}
-                onPress={() => onShare(link.url)}
-              />
+              <MaterialIcon name={'edit'} size={20} onPress={goToUpdate} />
             </Button>
             <Button
               mode="text"
