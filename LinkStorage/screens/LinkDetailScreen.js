@@ -189,7 +189,7 @@ const LinkDetailScreen = (props) => {
       alarm_id = link.alarm.id;
     }
 
-    props.navigation.navigate('SettingAlarm', {id: alarm_id});
+    props.navigation.navigate('SettingAlarm', {id: alarm_id, linkId: link.id});
   };
 
   if (link) {

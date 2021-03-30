@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, Response
 from app.models.link import Category
-from app.models.link import Link
+from app.models.link import Link, Alarm
 from app.models.members import Member
 import requests
 from bs4 import BeautifulSoup
@@ -197,3 +197,47 @@ def setPDF():
         Link.update({"id": link.id, "pdf_url": pdf_url})
 
         return jsonify({"pdf_url": pdf_url})
+
+
+@bp.route("/update/alarm", methods=["POST"])
+def updateAlarm():
+    alarm_id = int(request.json["id"])
+
+    display_time = request.json["display_time"]
+    alarm_time = display_time[0:16]
+
+    if alarm_id == -1:
+        a_json = {
+            "link_id": int(request.json["link_id"]),
+            "display_time": display_time,
+            "local_timezone": int(request.json["local_timezone"]),
+            "alarm_time": alarm_time
+        }
+
+        alarm = Alarm(a_json)
+        Alarm.save(alarm)
+
+    else:
+        alarm = Alarm.get(alarm_id)
+
+        a_json = {
+            "link_id": int(request.json["link_id"]),
+            "display_time": display_time,
+            "local_timezone": int(request.json["local_timezone"]),
+            "alarm_time": alarm_time,
+            "deleted_at": None
+        }
+
+        Alarm.update(alarm_id, a_json)
+
+    return jsonify({"success": True})
+
+
+@bp.route("/delete/alarm", methods=["POST"])
+def deleteAlarm():
+
+    alarm = Alarm.delete(int(request.json["id"]))
+
+    return jsonify({
+        "success": True
+    })

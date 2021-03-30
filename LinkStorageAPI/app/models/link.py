@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text, or_
+from sqlalchemy import ForeignKey, Column, Integer, String, Boolean, DateTime, and_, Text, or_, Float
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import generate_password_hash
@@ -113,18 +113,18 @@ class Link(Base):
         return l_json
 
     @classmethod
-    def getOne(cls,id) :
+    def getOne(cls, id):
         link = cls.query.filter(cls.id == id).first()
 
         alarm = Alarm.getWithLinkId(link.id)
 
-        if alarm and not alarm.deleted_at :
+        if alarm and not alarm.deleted_at:
             alarm_ = {
-                "id" : alarm.id,
-                "display_time" : alarm.display_time,
-                "local_timezone" : alarm.local_timezone
+                "id": alarm.id,
+                "display_time": alarm.display_time,
+                "local_timezone": alarm.local_timezone
             }
-        else :
+        else:
             alarm_ = -1
 
         l_json = {
@@ -141,7 +141,6 @@ class Link(Base):
         }
 
         return l_json
-
 
     @classmethod
     def encodes(cls, links):
@@ -209,8 +208,8 @@ class Alarm(Base):
     id = Column(Integer, primary_key=True)
 
     link_id = Column(Integer, ForeignKey("link.id"))
-    display_time = Column(DateTime)
-    local_timezone = Column(String(20))
+    display_time = Column(String(30))
+    local_timezone = Column(Float)
     alarm_time = Column(String(30))
 
     deleted_at = Column(DateTime)
@@ -219,8 +218,31 @@ class Alarm(Base):
     @classmethod
     def get(cls, id):
         return cls.query.filter(cls.id == id).first()
-    
+
     @classmethod
-    def getWithLinkId(cls,link_id) :
+    def getWithLinkId(cls, link_id):
         return cls.query.filter(cls.link_id == link_id).first()
 
+    @classmethod
+    def save(cls, alarm):
+        db.session.add(alarm)
+        db.session.commit()
+
+    @classmethod
+    def update(cls, id, j_object):
+
+        alarm = cls.query.filter(cls.id == id).first()
+        alarm.update_with_dict(j_object)
+
+        db.session.commit()
+
+        return alarm
+
+    @classmethod
+    def delete(cls, id):
+        alarm = cls.query.filter(cls.id == id).first()
+        alarm.deleted_at = datetime.now()
+
+        db.session.commit()
+
+        return alarm
