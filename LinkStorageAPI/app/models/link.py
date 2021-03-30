@@ -118,7 +118,7 @@ class Link(Base):
 
         alarm = Alarm.getWithLinkId(link.id)
 
-        if alarm :
+        if alarm and not alarm.deleted_at :
             alarm_ = {
                 "id" : alarm.id,
                 "display_time" : alarm.display_time,

@@ -17,6 +17,7 @@ import EditCategoriesScreen from '../screens/EditCategoriesScreen';
 import CategoryColorPickerScreen from '../screens/CategoryColorPickerScreen';
 import FilterCategoryScreen from '../screens/FilterCategoryScreen';
 import LinkDetailScreen from '../screens/LinkDetailScreen';
+import SettingAlarmScreen from '../screens/SettingAlarmScreen';
 
 const defaultStackOptions = {
   defaultNavigationOptions: {
@@ -39,6 +40,7 @@ const MainNavigation = createStackNavigator(
     LinkDetail: LinkDetailScreen,
     EditCategories: EditCategoriesScreen,
     CategoryColorPicker: CategoryColorPickerScreen,
+    SettingAlarm: SettingAlarmScreen,
   },
   defaultStackOptions,
 );
@@ -50,6 +52,7 @@ const FavNavigation = createStackNavigator(
     LinkDetail: LinkDetailScreen,
     EditCategories: EditCategoriesScreen,
     CategoryColorPicker: CategoryColorPickerScreen,
+    SettingAlarm: SettingAlarmScreen,
   },
   defaultStackOptions,
 );

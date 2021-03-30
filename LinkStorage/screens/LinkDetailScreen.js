@@ -181,6 +181,17 @@ const LinkDetailScreen = (props) => {
     }
   }, [link]);
 
+  goToAlarmSetting = () => {
+    let alarm_id;
+    if (link.alarm === -1) {
+      alarm_id = -1;
+    } else {
+      alarm_id = link.alarm.id;
+    }
+
+    props.navigation.navigate('SettingAlarm', {id: alarm_id});
+  };
+
   if (link) {
     return (
       <View style={styles.container}>
@@ -260,9 +271,13 @@ const LinkDetailScreen = (props) => {
               color={Color.primaryColor}
               style={styles.button}>
               <Icon
-                name={'md-notifications-outline'}
+                name={
+                  link.alarm === -1
+                    ? 'md-notifications-outline'
+                    : 'md-notifications'
+                }
                 size={20}
-                onPress={() => onShare(link.url)}
+                onPress={goToAlarmSetting}
               />
             </Button>
           </View>
