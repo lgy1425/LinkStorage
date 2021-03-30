@@ -176,9 +176,8 @@ def getLinks():
 
 @bp.route("/get/link")
 def getLink():
-    link = Link.get(int(request.args["id"]))
 
-    return jsonify({"link": Link.encode(link)})
+    return jsonify({"link": Link.getOne(int(request.args["id"]))})
 
 
 @bp.route("/set/pdf")

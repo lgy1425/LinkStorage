@@ -113,6 +113,37 @@ class Link(Base):
         return l_json
 
     @classmethod
+    def getOne(cls,id) :
+        link = cls.query.filter(cls.id == id).first()
+
+        alarm = Alarm.getWithLinkId(link.id)
+
+        if alarm :
+            alarm_ = {
+                "id" : alarm.id,
+                "display_time" : alarm.display_time,
+                "local_timezone" : alarm.local_timezone
+            }
+        else :
+            alarm_ = -1
+
+        l_json = {
+            "id": link.id,
+            "url": link.url,
+            "icon": link.icon,
+            "title": link.title,
+            "description": link.description,
+            "category_id": link.category_id,
+            "star": link.star,
+            "pdf_url": link.pdf_url,
+            "domain": link.domain,
+            "alarm": alarm_
+        }
+
+        return l_json
+
+
+    @classmethod
     def encodes(cls, links):
         links_json = []
 
@@ -172,3 +203,24 @@ class Link(Base):
         q.join(Category, isouter=True)
 
         return q.order_by(cls.updated_at.desc()).offset(offset * limit).limit(limit).all()
+
+
+class Alarm(Base):
+    id = Column(Integer, primary_key=True)
+
+    link_id = Column(Integer, ForeignKey("link.id"))
+    display_time = Column(DateTime)
+    local_timezone = Column(String(20))
+    alarm_time = Column(String(30))
+
+    deleted_at = Column(DateTime)
+    noti_id = Column(String(200))
+
+    @classmethod
+    def get(cls, id):
+        return cls.query.filter(cls.id == id).first()
+    
+    @classmethod
+    def getWithLinkId(cls,link_id) :
+        return cls.query.filter(cls.link_id == link_id).first()
+
