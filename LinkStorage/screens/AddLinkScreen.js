@@ -23,12 +23,18 @@ const AddLinkScreen = (props) => {
 
   const updatedLink = props.navigation.getParam('link');
 
-  const categoriesItems = categories.map((category, i) => {
+  let categoriesItems = categories.map((category, i) => {
     return {
       label: category.name,
       value: category.id,
       color: category.color,
     };
+  });
+
+  categoriesItems.push({
+    label: 'Add Category',
+    value: -1,
+    color: '#000',
   });
 
   const [selectedCategory, setSelectedCategory] = useState(
@@ -52,6 +58,8 @@ const AddLinkScreen = (props) => {
   const saveLink = async () => {
     if (!validateUrl(URL)) {
       Alert.alert('Please enter validated URL', '', [{text: 'OK'}]);
+    } else if (selectedCategory === -1) {
+      Alert.alert('Please select category', '', [{text: 'OK'}]);
     } else {
       setIsLoading(true);
 
@@ -86,6 +94,15 @@ const AddLinkScreen = (props) => {
     }
   };
 
+  const changeCategoryHandler = (item) => {
+    if (item.value === -1) {
+      setSelectedCategory(-1);
+      props.navigation.navigate('EditCategories');
+    } else {
+      setSelectedCategory(item.value);
+    }
+  };
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -113,7 +130,8 @@ const AddLinkScreen = (props) => {
             style={styles.dropdownstyle}
             itemStyle={styles.itemStyle}
             dropDownStyle={styles.dropDownStyle}
-            onChangeItem={(item) => setSelectedCategory(item.value)}
+            onChangeItem={(item) => changeCategoryHandler(item)}
+            dropDownMaxHeight={500}
           />
           <View style={styles.labelWrapper}>
             <Text style={styles.label}>URL</Text>

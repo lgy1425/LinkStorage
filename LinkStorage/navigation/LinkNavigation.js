@@ -37,6 +37,8 @@ const MainNavigation = createStackNavigator(
     AddLink: AddLinkScreen,
     FilterCategory: FilterCategoryScreen,
     LinkDetail: LinkDetailScreen,
+    EditCategories: EditCategoriesScreen,
+    CategoryColorPicker: CategoryColorPickerScreen,
   },
   defaultStackOptions,
 );
@@ -46,6 +48,8 @@ const FavNavigation = createStackNavigator(
     FavList: FavListScreen,
     AddLink: AddLinkScreen,
     LinkDetail: LinkDetailScreen,
+    EditCategories: EditCategoriesScreen,
+    CategoryColorPicker: CategoryColorPickerScreen,
   },
   defaultStackOptions,
 );

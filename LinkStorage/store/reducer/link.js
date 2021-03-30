@@ -20,7 +20,12 @@ export default (state = initialState, action) => {
         currentSearchKey: '',
       };
     case GET_LINKS:
-      return {...state, links: action.links};
+      if (action.offset === 0) {
+        return {...state, links: action.links};
+      } else {
+        return {...state, links: state.links.concat(action.links)};
+      }
+
     case SET_CURRENT_SEARCHKEY:
       return {...state, currentSearchKey: action.search_key};
     case UPDATE_LINK:

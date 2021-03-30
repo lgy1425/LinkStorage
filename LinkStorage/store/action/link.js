@@ -65,7 +65,12 @@ export const getLinks = (offset, search_key, category_id) => {
 
       const resData = await response.json();
 
-      dispatch({type: GET_LINKS, links: resData.links, search_key: search_key});
+      dispatch({
+        type: GET_LINKS,
+        links: resData.links,
+        search_key: search_key,
+        offset: offset,
+      });
     } catch (err) {
       throw err;
     }

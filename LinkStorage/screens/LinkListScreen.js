@@ -29,6 +29,7 @@ const LinkListScreen = (props) => {
   const currentSearchKey = useSelector((state) => state.link.currentSearchKey);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isFlatLoading, setIsFlatLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -40,25 +41,28 @@ const LinkListScreen = (props) => {
     }
   }, [dispatch]);
 
-  const loadLinks = useCallback(async () => {
-    try {
-      let category_id = null;
-      if (filteredCategory) {
-        category_id = filteredCategory.id;
-      }
+  const loadLinks = useCallback(
+    async (o_s) => {
+      try {
+        let category_id = null;
+        if (filteredCategory) {
+          category_id = filteredCategory.id;
+        }
 
-      await dispatch(
-        linkActions.getLinks(offset, currentSearchKey, category_id),
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }, [dispatch, filteredCategory, offset, currentSearchKey]);
+        await dispatch(
+          linkActions.getLinks(o_s, currentSearchKey, category_id),
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [dispatch, filteredCategory, currentSearchKey],
+  );
 
   useEffect(() => {
     setIsLoading(true);
     loadCategories().then(() => {});
-    loadLinks().then(() => {
+    loadLinks(offset).then(() => {
       setIsLoading(false);
     });
   }, [dispatch, loadCategories, loadLinks]);
@@ -68,12 +72,18 @@ const LinkListScreen = (props) => {
       setIsLoading(true);
       setOffset(0);
       dispatch(
-        linkActions.getLinks(offset, currentSearchKey, filteredCategory.id),
+        linkActions.getLinks(0, currentSearchKey, filteredCategory.id),
       ).then(() => {
         setIsLoading(false);
       });
+    } else {
+      setIsLoading(true);
+      setOffset(0);
+      dispatch(linkActions.getLinks(0, currentSearchKey, null)).then(() => {
+        setIsLoading(false);
+      });
     }
-  }, [dispatch, filteredCategory, currentSearchKey, offset]);
+  }, [dispatch, filteredCategory, currentSearchKey]);
 
   const links = useSelector((state) => state.link.links);
 
@@ -95,11 +105,22 @@ const LinkListScreen = (props) => {
 
   let linkCards = null;
 
+  const handLoadMore = () => {
+    setIsFlatLoading(true);
+    setOffset(offset + 1);
+    loadLinks(offset + 1).then(() => {
+      setIsFlatLoading(false);
+    });
+  };
+
   if (links) {
     linkCards = (
       <FlatList
         data={links}
         keyExtractor={(item) => String(item.id)}
+        onEndReached={handLoadMore}
+        onEndReachedThreshold={0}
+        refreshing={isFlatLoading}
         renderItem={(itemData) => (
           <LinkCard link={itemData.item} navigation={props.navigation} />
         )}
