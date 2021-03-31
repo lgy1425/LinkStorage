@@ -7,7 +7,7 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator, Platform} from 'react-native';
+import {View, ActivityIndicator, Platform, Linking} from 'react-native';
 import DefaultPreference from 'react-native-default-preference';
 import Contant from './constants/contant';
 import DeviceInfo from 'react-native-device-info';
@@ -60,6 +60,34 @@ export default function App() {
 
     db.createTable();
   }, []);
+
+  useEffect(() => {
+    //IOS && ANDROID : 앱이 딥링크로 처음 실행될때, 앱이 열려있지 않을 때
+    Linking.getInitialURL().then((url) => console.log(url));
+
+    //IOS : 앱이 딥링크로 처음 실행될때, 앱이 열려있지 않을 때 && 앱이 실행 중일 때
+    //ANDROID : 앱이 실행 중일 때
+    Linking.addEventListener('url', addListenerLink);
+
+    return () => remover();
+  }, []);
+
+  const deepLink = (url) => {
+    // if (url) {
+    //   navigate('OTHER_PAGE', {share: url});
+    // }
+  };
+
+  const addListenerLink = ({url}) => {
+    console.log(url);
+    // if (url) {
+    //   navigate('OTHER_PAGE', {share: url});
+    // }
+  };
+
+  const remover = () => {
+    Linking.removeEventListener('url');
+  };
 
   if (!deviceLoaded) {
     return (
