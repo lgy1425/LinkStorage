@@ -181,15 +181,22 @@ const LinkDetailScreen = (props) => {
     }
   }, [link]);
 
-  goToAlarmSetting = () => {
+  const goToAlarmSetting = () => {
     let alarm_id;
+    let display_time;
     if (link.alarm === -1) {
       alarm_id = -1;
+      display_time = new Date();
     } else {
       alarm_id = link.alarm.id;
+      display_time = new Date(link.alarm.display_time);
     }
 
-    props.navigation.navigate('SettingAlarm', {id: alarm_id, linkId: link.id});
+    props.navigation.navigate('SettingAlarm', {
+      id: alarm_id,
+      linkId: link.id,
+      display_time: display_time,
+    });
   };
 
   if (link) {
