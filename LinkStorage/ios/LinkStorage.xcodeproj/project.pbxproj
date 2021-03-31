@@ -17,9 +17,9 @@
 		2DCD954D1E0B4F2C00145EB5 /* LinkStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LinkStorageTests.m */; };
 		4F1789017346444BC7D94880 /* libPods-LinkStorage-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A54CA0DFBCB08514560E91D /* libPods-LinkStorage-tvOSTests.a */; };
 		7F16476F26105673009B12C7 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 7F16476E26105673009B12C7 /* www */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		85D1A9892389E80B9C66DF2A /* libPods-LinkStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14508CBA5E97C124A521BA94 /* libPods-LinkStorage.a */; };
 		9D29F7273132AECF120C2502 /* libPods-LinkStorage-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BDE417919B5214F68F8C67 /* libPods-LinkStorage-tvOS.a */; };
+		B77AE7182614A86100511432 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B77AE7172614A86100511432 /* LaunchScreen.storyboard */; };
 		DAAE2DFA4D4CAAACB86D7558 /* libPods-LinkStorage-LinkStorageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 641521290D2F40F5D9BDD013 /* libPods-LinkStorage-LinkStorageTests.a */; };
 /* End PBXBuildFile section */
 
@@ -61,10 +61,10 @@
 		641521290D2F40F5D9BDD013 /* libPods-LinkStorage-LinkStorageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkStorage-LinkStorageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		778BCA917196231DCDF356C8 /* Pods-LinkStorage-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-LinkStorage-tvOSTests/Pods-LinkStorage-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7F16476E26105673009B12C7 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = LinkStorage/www; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LinkStorage/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9A54CA0DFBCB08514560E91D /* libPods-LinkStorage-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkStorage-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B81741B218270E53C55E205 /* Pods-LinkStorage-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-LinkStorage-tvOS/Pods-LinkStorage-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		AB67ED8DAEA0BAC84F5F3C15 /* Pods-LinkStorage-LinkStorageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-LinkStorageTests.release.xcconfig"; path = "Target Support Files/Pods-LinkStorage-LinkStorageTests/Pods-LinkStorage-LinkStorageTests.release.xcconfig"; sourceTree = "<group>"; };
+		B77AE7172614A86100511432 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4BDE417919B5214F68F8C67 /* libPods-LinkStorage-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkStorage-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D917C685DE6A79725FBE2613 /* Pods-LinkStorage-LinkStorageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkStorage-LinkStorageTests.debug.xcconfig"; path = "Target Support Files/Pods-LinkStorage-LinkStorageTests/Pods-LinkStorage-LinkStorageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -133,8 +133,8 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				B77AE7172614A86100511432 /* LaunchScreen.storyboard */,
 			);
 			name = LinkStorage;
 			sourceTree = "<group>";
@@ -296,6 +296,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = SHYT938R42;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -343,7 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F16476F26105673009B12C7 /* www in Resources */,
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				B77AE7182614A86100511432 /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -723,6 +724,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SHYT938R42;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LinkStorage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -731,7 +733,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.ggpark.LinkStorage;
 				PRODUCT_NAME = LinkStorage;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -746,6 +748,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SHYT938R42;
 				INFOPLIST_FILE = LinkStorage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -753,7 +756,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.ggpark.LinkStorage;
 				PRODUCT_NAME = LinkStorage;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

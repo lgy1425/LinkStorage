@@ -117,6 +117,7 @@ class Link(Base):
         link = cls.query.filter(cls.id == id).first()
 
         alarm = Alarm.getWithLinkId(link.id)
+        category = Category.get(link.category_id)
 
         if alarm and not alarm.deleted_at:
             alarm_ = {
@@ -137,7 +138,11 @@ class Link(Base):
             "star": link.star,
             "pdf_url": link.pdf_url,
             "domain": link.domain,
-            "alarm": alarm_
+            "alarm": alarm_,
+            "category": {
+                "name": category.name,
+                "color": category.color
+            }
         }
 
         return l_json
