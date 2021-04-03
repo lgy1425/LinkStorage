@@ -1,6 +1,8 @@
 import Contant from '../../constants/contant';
 import DefaultPreference from 'react-native-default-preference';
 
+import * as db from '../../helper/db';
+
 export const CREATE_LINK = 'CREATE_LINK';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_CURRENT_SEARCHKEY = 'SET_CURRENT_SEARCHKEY';
@@ -123,6 +125,19 @@ export const updateLink = (id, url, category_id, description) => {
       });
 
       const resData = await res.json();
+
+      console.log(resData);
+
+      await db.updateLink(
+        resData.link.id,
+        resData.link.url,
+        resData.link.domain,
+        resData.link.title,
+        resData.link.description,
+        resData.link.category_id,
+        resData.link.category.name,
+        resData.link.category.color,
+      );
 
       dispatch({type: UPDATE_LINK, link: resData.link});
     } catch (err) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -17,19 +17,39 @@ import Color from '../constants/color';
 import {validateUrl} from '../utils/util';
 import * as linkActions from '../store/action/link';
 
+import * as categoryActions from '../store/action/category';
+
 const AddLinkScreen = (props) => {
   const dispatch = useDispatch();
+
+  const loadCategories = useCallback(async () => {
+    try {
+      await dispatch(categoryActions.getCategories());
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!categories) {
+      loadCategories().then(() => {});
+    }
+  }, [categories, dispatch, loadCategories]);
+
   const categories = useSelector((state) => state.categories.categories);
 
   const updatedLink = props.navigation.getParam('link');
 
-  let categoriesItems = categories.map((category, i) => {
-    return {
-      label: category.name,
-      value: category.id,
-      color: category.color,
-    };
-  });
+  let categoriesItems = [];
+  if (categories) {
+    categoriesItems = categories.map((category, i) => {
+      return {
+        label: category.name,
+        value: category.id,
+        color: category.color,
+      };
+    });
+  }
 
   categoriesItems.push({
     label: 'Add Category',
@@ -38,10 +58,20 @@ const AddLinkScreen = (props) => {
   });
 
   const [selectedCategory, setSelectedCategory] = useState(
-    updatedLink ? updatedLink.category_id : categoriesItems[0].value,
+    updatedLink
+      ? updatedLink.category_id
+      : categoriesItems
+      ? categoriesItems[0].value
+      : -1,
   );
 
-  const [URL, setURL] = useState(updatedLink ? updatedLink.url : '');
+  const [URL, setURL] = useState(
+    updatedLink
+      ? updatedLink.url
+      : props.navigation.getParam('url')
+      ? props.navigation.getParam('url')
+      : '',
+  );
   const [description, setDescription] = useState(
     updatedLink ? updatedLink.description : '',
   );
@@ -58,18 +88,28 @@ const AddLinkScreen = (props) => {
   const saveLink = async () => {
     if (!validateUrl(URL)) {
       Alert.alert('Please enter validated URL', '', [{text: 'OK'}]);
-    } else if (selectedCategory === -1) {
+    } else if (
+      selectedCategory === -1 &&
+      !props.navigation.getParam('externalShare')
+    ) {
       Alert.alert('Please select category', '', [{text: 'OK'}]);
     } else {
+      let category_id = selectedCategory;
+      if (selectedCategory === -1) {
+        category_id = categoriesItems[0].value;
+      }
+
       setIsLoading(true);
 
       if (updatedLink) {
         try {
+          console.log(updatedLink.id, URL, category_id, description);
+
           await dispatch(
             linkActions.updateLink(
               updatedLink.id,
               URL,
-              selectedCategory,
+              category_id,
               description,
             ),
           );
@@ -80,9 +120,7 @@ const AddLinkScreen = (props) => {
         }
       } else {
         try {
-          await dispatch(
-            linkActions.createLink(URL, selectedCategory, description),
-          );
+          await dispatch(linkActions.createLink(URL, category_id, description));
 
           props.navigation.goBack();
         } catch (err) {
@@ -124,7 +162,11 @@ const AddLinkScreen = (props) => {
           <DropDownPicker
             items={categoriesItems}
             defaultValue={
-              updatedLink ? updatedLink.category_id : categoriesItems[0].value
+              updatedLink
+                ? updatedLink.category_id
+                : categoriesItems
+                ? categoriesItems[0].value
+                : -1
             }
             containerStyle={styles.containerStyle}
             style={styles.dropdownstyle}

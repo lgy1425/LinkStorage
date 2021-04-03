@@ -37,6 +37,28 @@ _createTable = (tx) => {
     });
 };
 
+_updateTable = (
+  tx,
+  id,
+  url,
+  domain,
+  title,
+  description,
+  category_id,
+  category_name,
+  category_color,
+) => {
+  tx.executeSql(
+    `UPDATE link set id=${id},url='${url}',domain='${domain}',title='${title}',description='${description}',category_id=${category_id},category_name='${category_name}',category_color='${category_color}' where id=${id}`,
+  )
+    .then(() => {
+      console.log('sqlite CREATE TABLE done');
+    })
+    .catch((error) => {
+      console.log('sqlite CREATE TABLE error: ', error);
+    });
+};
+
 _insertTable = (
   tx,
   id,
@@ -178,6 +200,48 @@ export const deleteLink = async (id) => {
   );
 };
 
+export const updateLink = async (
+  id,
+  url,
+  domain,
+  title,
+  description,
+  category_id,
+  category_name,
+  category_color,
+) => {
+  await SQLite.openDatabase(
+    {
+      name: 'linklocal.db',
+      createFromLocation: 1,
+    },
+    (DB) => {
+      DB.transaction((tx) =>
+        this._updateTable(
+          tx,
+          id,
+          url,
+          domain,
+          title,
+          description,
+          category_id,
+          category_name,
+          category_color,
+        ),
+      )
+        .then(() => {
+          console.log('update table transaction done');
+        })
+        .catch((error) => {
+          console.log('update table transaction fail: ', error);
+        });
+    },
+    (error) => {
+      console.error(error);
+    },
+  );
+};
+
 export const selectLinks = async () => {
   const DB = await SQLite.openDatabase({
     name: 'linklocal.db',
@@ -209,8 +273,6 @@ export const selectLinks = async () => {
       },
     );
   });
-
-  console.log(links);
 
   return links;
 };

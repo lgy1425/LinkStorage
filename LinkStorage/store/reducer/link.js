@@ -30,10 +30,12 @@ export default (state = initialState, action) => {
       return {...state, currentSearchKey: action.search_key};
     case UPDATE_LINK:
       const index = state.links.findIndex((link) => link.id === action.link.id);
-      let updatedLinks = state.links;
+      const updatedLinks = [...state.links];
+
       if (index !== -1) {
         updatedLinks[index] = action.link;
       }
+
       return {...state, links: updatedLinks};
 
     case DELETE_LINK:

@@ -21,6 +21,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import LinkCard from '../components/LinkCard';
 import {FlatList} from 'react-native';
 
+import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
+
 const LinkListScreen = (props) => {
   const [searchKey, setSearchKey] = useState('');
   const [filteredCategory, setFilteredCategory] = useState(null);
@@ -65,6 +67,7 @@ const LinkListScreen = (props) => {
     loadLinks(offset).then(() => {
       setIsLoading(false);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, loadCategories, loadLinks]);
 
   useEffect(() => {
@@ -112,6 +115,23 @@ const LinkListScreen = (props) => {
       setIsFlatLoading(false);
     });
   };
+
+  useEffect(() => {
+    // To get All Recived Urls
+    ReceiveSharingIntent.getReceivedFiles(
+      (files) => {
+        props.navigation.navigate('AddLink', {
+          url: files[0].weblink,
+          externalShare: true,
+        });
+        ReceiveSharingIntent.clearReceivedFiles();
+      },
+      (error) => {
+        console.log(error);
+      },
+      'kr.ggpark.LinkStorage',
+    );
+  }, [props.navigation]);
 
   if (links) {
     linkCards = (
