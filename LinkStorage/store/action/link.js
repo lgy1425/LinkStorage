@@ -9,6 +9,7 @@ export const SET_CURRENT_SEARCHKEY = 'SET_CURRENT_SEARCHKEY';
 export const DELETE_LINK = 'DELETE_LINK';
 
 export const UPDATE_LINK = 'UPDATE_LINK';
+export const OPEN_REMOTE = 'OPEN_REMOTE';
 
 export const createLink = (url, category_id, description) => {
   return async (dispatch, getState) => {
@@ -162,5 +163,11 @@ export const deleteLink = (id) => {
     } catch (err) {
       throw err;
     }
+  };
+};
+
+export const setRemoteOpen = () => {
+  return async (dispatch, getState) => {
+    dispatch({type: OPEN_REMOTE, link: 'hi'});
   };
 };

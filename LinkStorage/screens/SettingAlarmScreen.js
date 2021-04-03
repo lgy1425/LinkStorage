@@ -6,6 +6,7 @@ import Color from '../constants/color';
 import Constant from '../constants/contant';
 
 import messaging from '@react-native-firebase/messaging';
+import DefaultPreference from 'react-native-default-preference';
 
 const SettingAlarmScreen = (props) => {
   const [date, setDate] = useState(props.navigation.getParam('display_time'));
@@ -21,8 +22,18 @@ const SettingAlarmScreen = (props) => {
 
     if (enabled) {
       const fcmToken = await messaging().getToken();
+      const username = await DefaultPreference.get('username');
 
-      console.log(fcmToken);
+      await fetch(`${Constant.base_url}/device/updatefcm`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          fcm_token: fcmToken,
+        }),
+      });
 
       const now = new Date();
       const utcTimeOffset = now.getTimezoneOffset() / 60;

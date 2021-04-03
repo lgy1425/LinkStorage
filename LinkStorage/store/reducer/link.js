@@ -2,6 +2,7 @@ import {
   CREATE_LINK,
   DELETE_LINK,
   GET_LINKS,
+  OPEN_REMOTE,
   SET_CURRENT_SEARCHKEY,
   UPDATE_LINK,
 } from '../action/link';
@@ -9,6 +10,7 @@ import {
 const initialState = {
   links: null,
   currentSearchKey: '',
+  remoteLink: null,
 };
 
 export default (state = initialState, action) => {
@@ -43,6 +45,12 @@ export default (state = initialState, action) => {
         ...state,
         links: state.links.filter((link) => link.id !== action.linkId),
       };
+    case OPEN_REMOTE:
+      return {
+        ...state,
+        remoteLink: action.link,
+      };
+
     default:
       return state;
   }

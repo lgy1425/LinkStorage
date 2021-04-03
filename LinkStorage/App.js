@@ -16,6 +16,8 @@ import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import categoryReducer from './store/reducer/category';
 import linkReducer from './store/reducer/link';
+import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './RootNavigation';
 
 import LinkNavigation from './navigation/LinkNavigation';
 import Toast from 'react-native-toast-message';
@@ -32,6 +34,23 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
   const [deviceLoaded, setDeviceLoaded] = useState(false);
+
+  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    const {data} = remoteMessage;
+    console.log(data, 'remote..!!');
+  });
+
+  messaging().onNotificationOpenedApp((remoteMessage) => {
+    console.log('[push] onNotificationOpenedApp', remoteMessage);
+  });
+
+  messaging()
+    .getInitialNotification()
+    .then((remoteMessage) => {
+      if (remoteMessage) {
+        console.log('[push] getInitialNotification', remoteMessage);
+      }
+    });
 
   useEffect(() => {
     DefaultPreference.get('username').then(function (value) {
@@ -80,7 +99,9 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <LinkNavigation />
+      <NavigationContainer ref={navigationRef}>
+        <LinkNavigation />
+      </NavigationContainer>
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </Provider>
   );

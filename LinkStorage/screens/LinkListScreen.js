@@ -117,7 +117,6 @@ const LinkListScreen = (props) => {
   };
 
   useEffect(() => {
-    // To get All Recived Urls
     ReceiveSharingIntent.getReceivedFiles(
       (files) => {
         props.navigation.navigate('AddLink', {
