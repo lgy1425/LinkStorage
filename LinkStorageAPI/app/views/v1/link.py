@@ -89,8 +89,12 @@ def parsingSite(url):
 
         soup = BeautifulSoup(html, "html.parser")
         title = soup.find("title").get_text()
-        html = deEmojify(html)
-        innertext = soup.get_text()
+        try:
+            html = deEmojify(html)
+            innertext = soup.get_text()
+        except:
+            html = ""
+            innertext = ""
 
         fav_filename = random_char(12) + ".jpg"
         try:
@@ -120,7 +124,12 @@ def updateLink():
         request.json["domain"] = domain
         request.json["pdf_url"] = ""
 
-    link = Link.update(request.json)
+    try:
+        link = Link.update(request.json)
+    except:
+        request.json["html"] = ""
+        request.json["innertext"] = ""
+        link = Link.update(request.json)
 
     return jsonify({
         "success": True,
@@ -151,8 +160,14 @@ def createLink():
             "innertext": innertext
         }
 
-        link = Link(l_obj)
-        Link.save(link)
+        try:
+            link = Link(l_obj)
+            Link.save(link)
+        except:
+            l_obj["html"] = ""
+            l_obj["innertext"] = ""
+            link = Link(l_obj)
+            Link.save(link)
 
         return jsonify({
             "success": True,
