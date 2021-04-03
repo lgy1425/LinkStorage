@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator, Platform, Linking} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, ActivityIndicator, Platform, Alert} from 'react-native';
 import DefaultPreference from 'react-native-default-preference';
 import Contant from './constants/contant';
 import DeviceInfo from 'react-native-device-info';
@@ -21,6 +21,7 @@ import LinkNavigation from './navigation/LinkNavigation';
 import Toast from 'react-native-toast-message';
 
 import * as db from './helper/db';
+import messaging from '@react-native-firebase/messaging';
 
 const rootReducer = combineReducers({
   categories: categoryReducer,
@@ -59,6 +60,14 @@ export default function App() {
     });
 
     db.createTable();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
 
   if (!deviceLoaded) {

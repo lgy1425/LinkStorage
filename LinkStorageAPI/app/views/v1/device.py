@@ -24,3 +24,14 @@ def save():
     return jsonify({
         "username": member.username
     })
+
+
+@bp.route("/updatefcm", methods=['POST'])
+def updateFCM():
+    member = Member.getUserId(request.json["username"])
+
+    Member.updateFCM(member, request.json["fcm_token"])
+
+    return jsonify({
+        "success": True
+    })

@@ -1,35 +1,52 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator, Alert} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {Button} from 'react-native-paper';
 import Color from '../constants/color';
 import Constant from '../constants/contant';
 
+import messaging from '@react-native-firebase/messaging';
+
 const SettingAlarmScreen = (props) => {
   const [date, setDate] = useState(props.navigation.getParam('display_time'));
   const [isLoading, setIsLoading] = useState(false);
 
-  const saveAlarm = () => {
-    const now = new Date();
-    const utcTimeOffset = now.getTimezoneOffset() / 60;
-
+  const saveAlarm = async () => {
+    const authStatus = await messaging().requestPermission();
     setIsLoading(true);
 
-    fetch(`${Constant.base_url}/link/update/alarm`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: props.navigation.getParam('id'),
-        display_time: date,
-        local_timezone: utcTimeOffset,
-        link_id: props.navigation.getParam('linkId'),
-      }),
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.goBack();
-    });
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await messaging().getToken();
+
+      console.log(fcmToken);
+
+      const now = new Date();
+      const utcTimeOffset = now.getTimezoneOffset() / 60;
+
+      fetch(`${Constant.base_url}/link/update/alarm`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: props.navigation.getParam('id'),
+          display_time: date,
+          local_timezone: utcTimeOffset,
+          link_id: props.navigation.getParam('linkId'),
+        }),
+      }).then((res) => {
+        setIsLoading(false);
+        props.navigation.goBack();
+      });
+    } else {
+      Alert.alert('You cannot set Alarm without Permissions', '', [
+        {text: 'OK'},
+      ]);
+    }
   };
 
   const onCancel = () => {

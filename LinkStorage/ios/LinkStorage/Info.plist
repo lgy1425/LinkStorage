@@ -23,25 +23,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>LinkStorage</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>https</string>
+				<string>kr.ggpark.LinkStorage</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>LinkStorage</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>http</string>
-			</array>
-		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -80,6 +67,10 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -94,18 +85,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>kr.ggpark.LinkStorage</string> <!-- share url protocol (must be unique to your app, suggest using your apple bundle id) -->
-			</array>
-		</dict>
-		<dict/>
-	</array>
-
-
 </dict>
 </plist>

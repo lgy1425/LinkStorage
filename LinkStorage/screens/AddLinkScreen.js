@@ -103,8 +103,6 @@ const AddLinkScreen = (props) => {
 
       if (updatedLink) {
         try {
-          console.log(updatedLink.id, URL, category_id, description);
-
           await dispatch(
             linkActions.updateLink(
               updatedLink.id,
