@@ -8,8 +8,7 @@ from app.models.members import Member
 
 bp = Blueprint('v1_fcm', __name__, url_prefix='/v1/fcm')
 
-cred = credentials.Certificate("/www/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
-firebase_admin.initialize_app(cred)
+
 
 
 @bp.route('/test')
@@ -43,6 +42,12 @@ def test():
 
 @bp.route("/send")
 def send() :
+
+    try :
+        cred = credentials.Certificate("/www/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
+        firebase_admin.initialize_app(cred)
+    except :
+        ""
 
     now = datetime.datetime.now(datetime.timezone.utc)
     now = datetime.datetime.strftime(now,"%Y-%m-%dT%H:%M")

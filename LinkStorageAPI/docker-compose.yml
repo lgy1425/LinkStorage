@@ -11,3 +11,5 @@ services:
       - LC_ALL=C.UTF-8
     volumes:
       - /www/linkstorage_images:/usr/src/images
+    volumes:
+      - /www/cert:/usr/cert
