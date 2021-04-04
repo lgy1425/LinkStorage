@@ -44,7 +44,7 @@ def test():
 def send() :
 
     try :
-        cred = credentials.Certificate("/www/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
+        cred = credentials.Certificate("/usr/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
         firebase_admin.initialize_app(cred)
     except :
         ""
