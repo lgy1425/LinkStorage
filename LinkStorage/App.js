@@ -23,7 +23,6 @@ import LinkNavigation from './navigation/LinkNavigation';
 import Toast from 'react-native-toast-message';
 
 import * as db from './helper/db';
-import messaging from '@react-native-firebase/messaging';
 
 const rootReducer = combineReducers({
   categories: categoryReducer,
@@ -34,23 +33,6 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
   const [deviceLoaded, setDeviceLoaded] = useState(false);
-
-  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-    const {data} = remoteMessage;
-    console.log(data, 'remote..!!');
-  });
-
-  messaging().onNotificationOpenedApp((remoteMessage) => {
-    console.log('[push] onNotificationOpenedApp', remoteMessage);
-  });
-
-  messaging()
-    .getInitialNotification()
-    .then((remoteMessage) => {
-      if (remoteMessage) {
-        console.log('[push] getInitialNotification', remoteMessage);
-      }
-    });
 
   useEffect(() => {
     DefaultPreference.get('username').then(function (value) {
@@ -79,14 +61,6 @@ export default function App() {
     });
 
     db.createTable();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
   }, []);
 
   if (!deviceLoaded) {

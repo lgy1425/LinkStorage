@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Keyboard,
+  Alert,
 } from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
@@ -23,6 +24,8 @@ import {FlatList} from 'react-native';
 
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 
+import messaging from '@react-native-firebase/messaging';
+
 const LinkListScreen = (props) => {
   const [searchKey, setSearchKey] = useState('');
   const [filteredCategory, setFilteredCategory] = useState(null);
@@ -34,6 +37,46 @@ const LinkListScreen = (props) => {
   const [isFlatLoading, setIsFlatLoading] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      props.navigation.navigate('LinkDetail', {
+        linkId: Number(remoteMessage.data.link_id),
+      });
+
+      console.log('[push] onNotificationOpenedApp in List', remoteMessage);
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          props.navigation.navigate('LinkDetail', {
+            linkId: Number(remoteMessage.data.link_id),
+          });
+        }
+
+        console.log('[push] getInitialNoti', remoteMessage);
+      });
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert('Link Alarm!', remoteMessage.notification.body, [
+        {text: 'Cancel'},
+        {
+          text: 'Move',
+          onPress: () => {
+            props.navigation.navigate('LinkDetail', {
+              linkId: Number(remoteMessage.data.link_id),
+            });
+          },
+        },
+      ]);
+
+      console.log('push in foreground');
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
 
   const loadCategories = useCallback(async () => {
     try {

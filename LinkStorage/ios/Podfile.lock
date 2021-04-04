@@ -296,6 +296,8 @@ PODS:
   - React-jsinspector (0.63.4)
   - react-native-date-picker (3.2.10):
     - React-Core
+  - react-native-notifications (3.4.2):
+    - React-Core
   - react-native-receive-sharing-intent (1.1.0):
     - React
   - react-native-safe-area-context (3.2.0):
@@ -429,6 +431,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-notifications (from `../node_modules/react-native-notifications`)
   - react-native-receive-sharing-intent (from `../node_modules/react-native-receive-sharing-intent`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -513,6 +516,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-notifications:
+    :path: "../node_modules/react-native-notifications"
   react-native-receive-sharing-intent:
     :path: "../node_modules/react-native-receive-sharing-intent"
   react-native-safe-area-context:
@@ -602,6 +607,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-date-picker: 242eec7af56cea5fb2706d5db5d3837060b3884b
+  react-native-notifications: e914ff49de3b2268cfa1b5e2ad21fd27c36d5b7b
   react-native-receive-sharing-intent: 648f1eb35ae70886a8733d6be949042aa5111ffb
   react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
   react-native-sqlite-storage: ce71689c5a73b79390a1ab213555ae80979a5dc7
@@ -629,6 +635,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 07540f385107dbf68631a57bf35a37aa8abff6fc
+PODFILE CHECKSUM: 025da9ea0f5c8eb452b9670bddb43c7a888ccd7d
 
 COCOAPODS: 1.10.1

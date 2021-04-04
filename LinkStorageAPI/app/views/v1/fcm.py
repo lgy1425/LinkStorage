@@ -3,12 +3,13 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
 import datetime
-from app.models.link import Alarm,Link
+from app.models.link import Alarm, Link
 from app.models.members import Member
 
 bp = Blueprint('v1_fcm', __name__, url_prefix='/v1/fcm')
 
-cred = credentials.Certificate("/usr/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
+cred = credentials.Certificate(
+    "/usr/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
 firebase_admin.initialize_app(cred)
 
 
@@ -42,14 +43,14 @@ def test():
 
 
 @bp.route("/send")
-def send() :
+def send():
 
     now = datetime.datetime.now(datetime.timezone.utc)
-    now = datetime.datetime.strftime(now,"%Y-%m-%dT%H:%M")
+    now = datetime.datetime.strftime(now, "%Y-%m-%dT%H:%M")
 
     alarms = Alarm.getAlarmsInTime(now)
 
-    for alarm in alarms :
+    for alarm in alarms:
         link = Link.get(alarm.link_id)
         member = Member.get(link.user_id)
         message = messaging.Message(
@@ -66,4 +67,3 @@ def send() :
         response = messaging.send(message)
 
     return "success"
-
