@@ -11,6 +11,7 @@ from app.models.base import Base
 from flask import jsonify
 from app.models.members import Member
 
+
 class Category(Base):
     id = Column(Integer, primary_key=True)
 
@@ -158,8 +159,15 @@ class Link(Base):
 
     @classmethod
     def save(cls, link):
-        db.session.add(link)
-        db.session.commit()
+        try:
+            db.session.add(link)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            link.html = ""
+            link.innertext = ""
+            db.session.add(link)
+            db.session.commit()
 
     @classmethod
     def update(cls, form):
@@ -172,7 +180,13 @@ class Link(Base):
         link = cls.query.filter(cls.id == int(form["id"])).first()
         link.update_with_dict(update_dict)
 
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            link.html = ""
+            link.innertext = ""
+            db.session.commit()
 
         return link
 
@@ -253,7 +267,7 @@ class Alarm(Base):
         return alarm
 
     @classmethod
-    def getAlarmsInTime(cls,t) :
-        alarms = cls.query.filter(cls.alarm_time==t).all()
+    def getAlarmsInTime(cls, t):
+        alarms = cls.query.filter(cls.alarm_time == t).all()
 
         return alarms

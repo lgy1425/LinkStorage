@@ -19,6 +19,9 @@ import * as linkActions from '../store/action/link';
 
 import * as categoryActions from '../store/action/category';
 
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
+
 const AddLinkScreen = (props) => {
   const dispatch = useDispatch();
 
@@ -204,6 +207,12 @@ const AddLinkScreen = (props) => {
       </View>
     </KeyboardAvoidingView>
   );
+};
+
+AddLinkScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Add Link',
+  };
 };
 
 const styles = StyleSheet.create({

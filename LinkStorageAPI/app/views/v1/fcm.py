@@ -8,9 +8,12 @@ from app.models.members import Member
 
 bp = Blueprint('v1_fcm', __name__, url_prefix='/v1/fcm')
 
-cred = credentials.Certificate(
-    "/usr/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
-firebase_admin.initialize_app(cred)
+try:
+    cred = credentials.Certificate(
+        "/usr/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
+    firebase_admin.initialize_app(cred)
+except:
+    ""
 
 
 @bp.route('/test')
@@ -55,7 +58,8 @@ def send():
         member = Member.get(link.user_id)
         message = messaging.Message(
             data={
-                'link_id': str(link.id)
+                'link_id': str(link.id),
+
             },
             notification=messaging.Notification(
                 title='LinkStorage Alarm',

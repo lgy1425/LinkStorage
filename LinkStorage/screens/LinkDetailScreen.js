@@ -303,6 +303,12 @@ const LinkDetailScreen = (props) => {
   }
 };
 
+LinkDetailScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: 'Link',
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     width: '100%',
