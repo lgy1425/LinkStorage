@@ -9,7 +9,7 @@ from app.extensions import db
 from app.models.base import Base
 
 from flask import jsonify
-
+from app.models.members import Member
 
 class Category(Base):
     id = Column(Integer, primary_key=True)
@@ -251,3 +251,9 @@ class Alarm(Base):
         db.session.commit()
 
         return alarm
+
+    @classmethod
+    def getAlarmsInTime(cls,t) :
+        alarms = cls.query.filter(cls.alarm_time==t).all()
+
+        return alarms

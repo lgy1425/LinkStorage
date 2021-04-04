@@ -8,6 +8,7 @@ from urllib.request import urlretrieve
 from app.views.utils import random_char, deEmojify
 import subprocess
 
+
 bp = Blueprint('v1_link', __name__, url_prefix='/v1/link')
 
 

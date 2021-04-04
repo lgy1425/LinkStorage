@@ -2,12 +2,13 @@ from flask import Blueprint, jsonify, request, Response
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
+import datetime
+from app.models.link import Alarm,Link
+from app.models.members import Member
 
 bp = Blueprint('v1_fcm', __name__, url_prefix='/v1/fcm')
 
-cred = credentials.Certificate(
-    "/Users/mediwhale/Documents/GY/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
-firebase_admin.initialize_app(cred)
+
 
 
 @bp.route('/test')
@@ -37,3 +38,37 @@ def test():
     print('Successfully sent message:', response)
 
     return "success"
+
+
+@bp.route("/send")
+def send() :
+
+    try :
+        cred = credentials.Certificate("/www/cert/linkstorage-6bc08-firebase-adminsdk-2wwmp-39429e8954.json")
+        firebase_admin.initialize_app(cred)
+    except :
+        ""
+
+    now = datetime.datetime.now(datetime.timezone.utc)
+    now = datetime.datetime.strftime(now,"%Y-%m-%dT%H:%M")
+
+    alarms = Alarm.getAlarmsInTime(now)
+
+    for alarm in alarms :
+        link = Link.get(alarm.link_id)
+        member = Member.get(link.user_id)
+        message = messaging.Message(
+            data={
+                'link_id': str(link.id)
+            },
+            notification=messaging.Notification(
+                title='LinkStorage Alarm',
+                body=link.title,
+            ),
+            token=member.fcm_token,
+        )
+
+        response = messaging.send(message)
+
+    return "success"
+

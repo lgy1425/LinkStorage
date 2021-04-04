@@ -34,3 +34,7 @@ class Member(Base, UserMixin):
     def updateFCM(cls, member, fcm_token):
         member.fcm_token = fcm_token
         db.session.commit()
+
+    @classmethod
+    def get(cls,id) :
+        return cls.query.filter(cls.id==id).first()
