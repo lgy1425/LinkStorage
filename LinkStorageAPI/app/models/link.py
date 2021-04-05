@@ -96,6 +96,7 @@ class Link(Base):
     def encode(cls, link):
 
         l_json = {
+            "updated_at": link.updated_at.strftime("%m-%d"),
             "id": link.id,
             "url": link.url,
             "icon": link.icon,
@@ -130,6 +131,7 @@ class Link(Base):
             alarm_ = -1
 
         l_json = {
+            "updated_at": link.updated_at.strftime("%m-%d"),
             "id": link.id,
             "url": link.url,
             "icon": link.icon,
