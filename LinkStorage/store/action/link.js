@@ -127,8 +127,6 @@ export const updateLink = (id, url, category_id, description) => {
 
       const resData = await res.json();
 
-      console.log(resData);
-
       await db.updateLink(
         resData.link.id,
         resData.link.url,
@@ -138,6 +136,8 @@ export const updateLink = (id, url, category_id, description) => {
         resData.link.category_id,
         resData.link.category.name,
         resData.link.category.color,
+        resData.link.updated_at,
+        resData.link.icon,
       );
 
       dispatch({type: UPDATE_LINK, link: resData.link});

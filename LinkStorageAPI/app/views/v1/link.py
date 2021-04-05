@@ -89,7 +89,12 @@ def parsingSite(url):
         html = html.replace("\t", "").replace("\n", "")
 
         soup = BeautifulSoup(html, "html.parser")
-        title = soup.find("title").get_text()
+
+        try:
+            title = soup.find("title").get_text()
+        except:
+            title = ""
+
         try:
             html = deEmojify(html)
             innertext = soup.get_text()

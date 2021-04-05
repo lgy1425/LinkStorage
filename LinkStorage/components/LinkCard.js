@@ -54,6 +54,7 @@ const LinkCard = (props) => {
               </Text>
             </View>
             <View style={styles.descriptionRow}>
+              <Text>{props.link.updated_at}</Text>
               <Text numberOfLines={1} style={styles.descriptionText}>
                 {props.link.description}
               </Text>
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: '#787878',
+    marginLeft: 5,
   },
   button: {
     flex: 1,

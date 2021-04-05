@@ -25,7 +25,9 @@ _createTable = (tx) => {
         "category_id"	INTEGER,
         "category_name"	TEXT,
         "category_color"	TEXT,
+        "updated_at" TEXT,
         "inserted_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        "icon" TEXT,
         PRIMARY KEY("id")
     )`,
   )
@@ -47,9 +49,11 @@ _updateTable = (
   category_id,
   category_name,
   category_color,
+  updated_at,
+  icon,
 ) => {
   tx.executeSql(
-    `UPDATE link set id=${id},url='${url}',domain='${domain}',title='${title}',description='${description}',category_id=${category_id},category_name='${category_name}',category_color='${category_color}' where id=${id}`,
+    `UPDATE link set id=${id},url='${url}',domain='${domain}',title='${title}',description='${description}',category_id=${category_id},category_name='${category_name}',category_color='${category_color}',updated_at='${updated_at}',icon='${icon}'  where id=${id}`,
   )
     .then(() => {
       console.log('sqlite CREATE TABLE done');
@@ -69,6 +73,8 @@ _insertTable = (
   category_id,
   category_name,
   category_color,
+  updated_at,
+  icon,
 ) => {
   tx.executeSql(
     `insert into link (id,
@@ -78,7 +84,9 @@ _insertTable = (
     description,
     category_id,
     category_name,
-    category_color) values(${id},'${url}','${domain}','${title}','${description}',${category_id},'${category_name}','${category_color}')`,
+    category_color,
+    updated_at,
+    icon) values(${id},'${url}','${domain}','${title}','${description}',${category_id},'${category_name}','${category_color}','${updated_at}','${icon}')`,
   )
     .then(() => {
       console.log('sqlite insert done');
@@ -146,6 +154,8 @@ export const insertLink = async (
   category_id,
   category_name,
   category_color,
+  updated_at,
+  icon,
 ) => {
   await SQLite.openDatabase(
     {
@@ -164,6 +174,8 @@ export const insertLink = async (
           category_id,
           category_name,
           category_color,
+          updated_at,
+          icon,
         ),
       )
         .then(() => {
@@ -209,6 +221,8 @@ export const updateLink = async (
   category_id,
   category_name,
   category_color,
+  updated_at,
+  icon,
 ) => {
   await SQLite.openDatabase(
     {
@@ -227,6 +241,8 @@ export const updateLink = async (
           category_id,
           category_name,
           category_color,
+          updated_at,
+          icon,
         ),
       )
         .then(() => {
@@ -257,6 +273,7 @@ export const selectLinks = async () => {
       (tx, results) => {
         const rows = results.rows;
         for (var i = 0; i < rows.length; i++) {
+          console.log(rows.item(i).updated_at);
           links.push({
             id: rows.item(i).id,
             title: rows.item(i).title,
@@ -268,6 +285,8 @@ export const selectLinks = async () => {
               color: rows.item(i).category_color,
               name: rows.item(i).category_name,
             },
+            updated_at: rows.item(i).updated_at,
+            icon: rows.item(i).icon,
           });
         }
       },

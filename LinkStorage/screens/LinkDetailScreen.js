@@ -72,6 +72,7 @@ const LinkDetailScreen = (props) => {
     } else {
       setIsStar(1);
       await dispatch(linkActions.updateStar(link.id, 1));
+
       await db.insertLink(
         link.id,
         link.url,
@@ -81,6 +82,8 @@ const LinkDetailScreen = (props) => {
         link.category_id,
         link.category.name,
         link.category.color,
+        link.updated_at,
+        link.icon,
       );
     }
   };
@@ -211,6 +214,9 @@ const LinkDetailScreen = (props) => {
             <Text numberOfLines={1} style={styles.urlText}>
               {link.url}
             </Text>
+          </View>
+          <View style={styles.textRow}>
+            <Text>{link.updated_at}</Text>
           </View>
           <View style={styles.textRow}>
             <Text style={styles.descriptionText}>{link.description}</Text>
