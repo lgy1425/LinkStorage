@@ -93,7 +93,7 @@ def parsingSite(url):
         try:
             title = soup.find("title").get_text()
         except:
-            title = ""
+            title = domain
 
         try:
             html = deEmojify(html)
